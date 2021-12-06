@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ParameterService {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -15,6 +17,17 @@ public class ParameterService {
     @Autowired
     ParameterJdbcDao parameterJdbcDao;
 
+    public List<Parameter> getAllParameter() {
+        List<Parameter> paramList = parameterJdbcDao.findAll();
+        return paramList;
+    }
+
+    public void listParam(){
+        List<Parameter> parameterList = getAllParameter();
+        for (Parameter param : parameterList ) {
+            log.debug(param.toString());
+        }
+    }
 
     private Parameter getParameter(String name) {
         Parameter parameter = parameterJdbcDao.findByKeyAndActive(name);

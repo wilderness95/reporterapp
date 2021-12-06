@@ -7,6 +7,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -14,11 +15,17 @@ public class ParameterJdbcDao extends BaseJdbcDao {
 
     @Override
     public String getTableName() {
-        return "user";
+        return "parameter";
+    }
+
+    public List<Parameter> findAll() {
+        String sql = "select * from "+getTableName();
+        List<Parameter> result = jdbcTemplate.query(sql, new ParameterMapper());
+        return result;
     }
 
     public Parameter findByKeyAndActive(String key) {
-        String sql = "select * from " + getTableName() + " p where p.key = ? and active";
+        String sql = "select * from " + getTableName() + " p where p.value_key = ? and active";
         Object[] params = {key};
         try {
             Parameter p = jdbcTemplate.queryForObject(sql, params, new ParameterMapper());
@@ -48,7 +55,7 @@ public class ParameterJdbcDao extends BaseJdbcDao {
             return null;
         String sql = "update " + getTableName() + " set          " +
                 "        value_key=?, " +
-                "        value=?, " +
+                "        value_data=?, " +
                 "        description=?, " +
                 "        active=? " +
                 "where " +

@@ -3,11 +3,13 @@ package hu.wilderness.reporterapp.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Getter
 @Setter
+@ToString
 @Entity
 public class Parameter {
 
@@ -18,10 +20,10 @@ public class Parameter {
     @Column(name = "value_key")
     private String key;
 
+    @Column(name = "value_data")
     private String value;
 
     private String description;
-
-    @Column(name = "active")
+    @Column(name="active")
     private Boolean active;
 }

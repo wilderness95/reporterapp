@@ -14,8 +14,8 @@ public class ParameterMapper implements RowMapper<Parameter> {
         Parameter parameter = new Parameter();
 
         parameter.setId(rs.getInt("id"));
-        parameter.setKey(rs.getString("key"));
-        parameter.setValue(rs.getString("value"));
+        parameter.setKey(rs.getString("value_key"));
+        parameter.setValue(rs.getString("value_data"));
         parameter.setDescription(rs.getString("description"));
         parameter.setActive(rs.getBoolean("active"));
 
