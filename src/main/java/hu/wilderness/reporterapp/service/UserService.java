@@ -19,9 +19,20 @@ public class UserService {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
+    TokenService tokenService;
+
+    @Autowired
     UserJdbcDao userJdbcDao;
 //TODO sec conf-ban kiszervezni
     BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(10, new SecureRandom());
+
+
+    public void testToken(){
+        User u = userJdbcDao.findByEmailAddress("lordzolta@gmail.com");
+        log.debug(u.toString());
+        tokenService.createNew(u);
+        log.debug("Sikeres Token létrehozás");
+    }
 
     public User createNew(RegistrationDto registrationDto) {
         User user = new User();
