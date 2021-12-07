@@ -33,8 +33,9 @@ public class RegistrationController {
     public String registration(RegistrationDto registrationDto) {
 
         userService.createNew(registrationDto);
+        userService.testToken();
      //   parameterService.listParam();
-        emailService.sendMail(registrationDto.getEmail(),"Email küldő java service teszt, fasztudja hanyadik próba",text(registrationDto.getName()));
+       // emailService.sendMail(registrationDto.getEmail(),"Email küldő java service teszt, fasztudja hanyadik próba",text(registrationDto.getName()));
         return "reg";
     }
     private String text(String name){

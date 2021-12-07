@@ -15,6 +15,7 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
+@ToString
 public class User {
 
     @Id
@@ -40,18 +41,10 @@ public class User {
 
     private Boolean active;
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", nickName='" + nickName + '\'' +
-                ", birthDate=" + birthDate +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", createdDate=" + createdDate +
-                ", lastLoggedIn=" + lastLoggedIn +
-                ", active=" + active +
-                '}';
+    public User() {
+    }
+
+    public User(Integer id) {
+        this.id = id;
     }
 }

@@ -1,7 +1,9 @@
 package hu.wilderness.reporterapp.dataacces.dao;
 
 import hu.wilderness.reporterapp.dataacces.dao.parents.BaseJdbcDao;
+import hu.wilderness.reporterapp.dataacces.mapper.UserMapper;
 import hu.wilderness.reporterapp.domain.User;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -15,6 +17,17 @@ public class UserJdbcDao extends BaseJdbcDao {
         return "user";
     }
 
+
+    public User findByEmailAddress(String emailAddress){
+        String sql = "select * from " + getTableName() + " u where u.email = ? ";
+        Object[] params = {emailAddress};
+        try {
+            User user = jdbcTemplate.queryForObject(sql, params, new UserMapper());
+            return user;
+        } catch (DataAccessException e) {
+            return null;
+        }
+    }
 
     public User insert(User u) {
         Map<String, Object> parameters = new HashMap();
