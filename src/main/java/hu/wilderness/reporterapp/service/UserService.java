@@ -28,7 +28,7 @@ public class UserService {
 
 
     public void testToken(){
-        User u = userJdbcDao.findByEmailAddress("lordzolta@gmail.com");
+        User u = userJdbcDao.findByEmailAddress("teszt");
         log.debug(u.toString());
         tokenService.createNew(u);
         log.debug("Sikeres Token létrehozás");

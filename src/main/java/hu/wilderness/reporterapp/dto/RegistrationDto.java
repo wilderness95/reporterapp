@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
+@ToString
 public class RegistrationDto {
 
     @NotNull
@@ -22,13 +23,4 @@ public class RegistrationDto {
     @NotNull
     private String email;
 
-    @Override
-    public String toString() {
-        return "RegistrationDto{" +
-                "name='" + name + '\'' +
-                ", nickName='" + nickName + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }
 }

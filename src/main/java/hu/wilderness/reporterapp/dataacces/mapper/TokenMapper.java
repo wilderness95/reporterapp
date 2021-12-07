@@ -21,7 +21,7 @@ public class TokenMapper implements RowMapper<Token> {
         token.setCreatedAt(DateMapperHelper.getDateTime(rs, "created_date"));
         token.setExpiresAt(DateMapperHelper.getDateTime(rs, "expires_date"));
         token.setConfirmedAt(DateMapperHelper.getDateTime(rs, "confirmed_date"));
-        token.setUser(new User(rs.getInt("user")));
+        token.setUser(new User(rs.getInt("user_id")));
         return token;
     }
 }
