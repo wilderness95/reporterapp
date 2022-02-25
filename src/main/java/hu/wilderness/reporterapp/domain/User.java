@@ -4,12 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
+import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
@@ -22,17 +20,16 @@ public class User {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
     private String name;
 
-    @NotNull
     private String nickName;
 
     private Date birthDate;
 
+    @Column( nullable=false )
     private String password;
 
-    @NotNull
+    @Column( unique=true, nullable=false )
     private String email;
 
     private Date createdDate;
@@ -41,10 +38,19 @@ public class User {
 
     private Boolean active;
 
+    @ManyToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = {@JoinColumn(name="user_id")},
+            inverseJoinColumns = {@JoinColumn(name="role_id")}
+    )
+    private Set<Role> role = new HashSet<Role>();
+
     public User() {
     }
 
     public User(Integer id) {
         this.id = id;
     }
+
 }
