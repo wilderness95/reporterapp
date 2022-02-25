@@ -8,6 +8,9 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +18,7 @@ import java.security.SecureRandom;
 import java.util.Date;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -32,6 +35,16 @@ public class UserService {
         log.debug(u.toString());
         tokenService.createNew(u);
         log.debug("Sikeres Token létrehozás");
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userJdbcDao.findByEmailAddress(email);
+        if (user == null) {
+            throw new UsernameNotFoundException(email);
+        }
+
+        return new CustomeUserDetailService(user);
     }
 
     public User createNew(RegistrationDto registrationDto) {
@@ -65,4 +78,6 @@ public class UserService {
         }
         return user;
     }
+
+
 }
