@@ -5,9 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 
 @Entity
@@ -15,6 +13,12 @@ import java.util.Set;
 @Setter
 @ToString
 public class User {
+
+
+    public enum UserRole {
+        ROLE_USER,
+        ROLE_ADMIN
+    }
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -29,7 +33,7 @@ public class User {
     @Column( nullable=false )
     private String password;
 
-    @Column( unique=true, nullable=false )
+    @Column( nullable=false )
     private String email;
 
     private Date createdDate;
@@ -38,13 +42,9 @@ public class User {
 
     private Boolean active;
 
-    @ManyToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = {@JoinColumn(name="user_id")},
-            inverseJoinColumns = {@JoinColumn(name="role_id")}
-    )
-    private Set<Role> role = new HashSet<Role>();
+    @Column
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     public User() {
     }

@@ -1,12 +1,14 @@
 package hu.wilderness.reporterapp.dataacces.mapper;
 
 
+
 import hu.wilderness.reporterapp.domain.User;
 import hu.wilderness.reporterapp.utils.DateMapperHelper;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 
 public class UserMapper implements RowMapper<User> {
 
@@ -24,6 +26,8 @@ public class UserMapper implements RowMapper<User> {
         user.setCreatedDate(DateMapperHelper.getDateTime(rs, "created_date"));
         user.setLastLoggedIn(DateMapperHelper.getDateTime(rs, "last_logged_in"));
         user.setActive(rs.getBoolean("active"));
+        try {user.setRole(User.UserRole.valueOf(rs.getString("role")));} catch (Exception e) {}
+
 
         return user;
     }
