@@ -1,12 +1,15 @@
 package hu.wilderness.reporterapp.dataacces.dao;
 
 import hu.wilderness.reporterapp.dataacces.dao.parents.BaseJdbcDao;
+import hu.wilderness.reporterapp.dataacces.mapper.ParameterMapper;
 import hu.wilderness.reporterapp.dataacces.mapper.UserMapper;
+import hu.wilderness.reporterapp.domain.Parameter;
 import hu.wilderness.reporterapp.domain.User;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -27,6 +30,12 @@ public class UserJdbcDao extends BaseJdbcDao {
         } catch (DataAccessException e) {
             return null;
         }
+    }
+
+    public List<User> findAll() {
+        String sql = "select * from "+getTableName();
+        List<User> result = jdbcTemplate.query(sql, new UserMapper());
+        return result;
     }
 
     public User insert(User u) {

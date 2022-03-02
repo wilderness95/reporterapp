@@ -16,7 +16,7 @@ public class TokenMapper implements RowMapper<Token> {
         Token token = new Token();
         token.setId(rs.getLong("id"));
         token.setActive(rs.getBoolean("active"));
-        try {token.setType(Token.TokenType.valueOf(rs.getString("parameter_type")));} catch (Exception e) {}
+        try {token.setType(Token.TokenType.valueOf(rs.getString("type")));} catch (Exception e) {}
         token.setToken(rs.getString("token"));
         token.setCreatedAt(DateMapperHelper.getDateTime(rs, "created_date"));
         token.setExpiresAt(DateMapperHelper.getDateTime(rs, "expires_date"));
