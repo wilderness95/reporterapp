@@ -8,7 +8,6 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,11 +29,11 @@ public class UserService implements UserDetailsService {
     UserJdbcDao userJdbcDao;
 
 
-//TODO sec conf-ban kiszervezni
+    //TODO sec conf-ban kiszervezni
     BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(10, new SecureRandom());
 
 
-    public void testToken(){
+    public void testToken() {
         User u = userJdbcDao.findByEmailAddress("teszt");
         log.debug(u.toString());
         tokenService.createNew(u);
@@ -42,11 +41,12 @@ public class UserService implements UserDetailsService {
     }
 
     public List<User> listUsers() {
-        Object user = SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
-        log.debug("Logged in user: {}", user.toString());
-
-        return userJdbcDao.findAll();
+//        Object user = SecurityContextHolder.getContext()
+//                .getAuthentication().getPrincipal();
+//        log.debug("Logged in user: {}", user.toString());
+        List<User> userList = userJdbcDao.findAll();
+        log.debug(userList.toString());
+        return userList;
     }
 
 
@@ -85,16 +85,13 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String emailAddress) throws UsernameNotFoundException {
-       User user = userJdbcDao.findByEmailAddress(emailAddress);
-        if (user == null){
+        User user = userJdbcDao.findByEmailAddress(emailAddress);
+        if (user == null) {
             throw new UsernameNotFoundException("User not found: " + emailAddress);
         }
 
-        tokenService.createNew(user);
-        log.debug("anyád: " + user.toString() +" jesl0" + bCryptPasswordEncoder.matches("admin",user.getPassword()));
         return new CustomUserDetails(user);
     }
-
 
 
 }

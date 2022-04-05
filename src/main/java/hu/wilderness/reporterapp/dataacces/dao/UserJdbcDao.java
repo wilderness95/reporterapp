@@ -1,9 +1,7 @@
 package hu.wilderness.reporterapp.dataacces.dao;
 
 import hu.wilderness.reporterapp.dataacces.dao.parents.BaseJdbcDao;
-import hu.wilderness.reporterapp.dataacces.mapper.ParameterMapper;
 import hu.wilderness.reporterapp.dataacces.mapper.UserMapper;
-import hu.wilderness.reporterapp.domain.Parameter;
 import hu.wilderness.reporterapp.domain.User;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -48,6 +46,7 @@ public class UserJdbcDao extends BaseJdbcDao {
         parameters.put("created_date", u.getCreatedDate());
         parameters.put("last_logged_in", u.getLastLoggedIn());
         parameters.put("active", u.getActive());
+        parameters.put("role_name", u.getRoleName());
 
 
         Number result = insert.executeAndReturnKey(parameters);
@@ -68,7 +67,8 @@ public class UserJdbcDao extends BaseJdbcDao {
                 "        email=?, " +
                 "        created_date=?, " +
                 "        last_logged_in=?, " +
-                "        active=? " +
+                "        active=?, " +
+                "        role_name=?   " +
                 "where " +
                 "        id=? ";
         Object[] parameters = {
@@ -80,7 +80,8 @@ public class UserJdbcDao extends BaseJdbcDao {
                 u.getCreatedDate(),
                 u.getLastLoggedIn(),
                 u.getActive(),
-                u.getId()
+                u.getId(),
+                u.getRoleName()
         };
         int result = jdbcTemplate.update(sql, parameters);
         return u;

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="hu" layout:decorate="~{layouts/main}">
+<head>
+	<title></title>
+</head>
+<body>
+		
+	<div layout:fragment="loginContent">
+		
+		<h2>Bejelentések</h2>
+
+		<form name="registration"  class="form-group">
+			<h2 class="form-signin-heading">Kérjük adja meg az adatokat:</h2>
+			<input type="text" name="hely" id="hely" placeholder="Helység"
+				   onfocus="this.placeholder = ''" onblur="this.placeholder = 'Helység'" required
+				   class="single-input">
+	<div class="mt-10">
+		<input type="text" name="veznev" id="veznev" placeholder="Vezetéknév"
+			   onfocus="this.placeholder = ''" onblur="this.placeholder = 'Vezetéknév'" required
+			   class="single-input">
+	</div>
+	<div class="mt-10">
+		<input type="text" name="keresztn" id="keresztn" placeholder="Keresztnév"
+			   onfocus="this.placeholder = ''" onblur="this.placeholder = 'Keresztnév'" required
+			   class="single-input">
+	</div>
+
+	<div class="mt-10">
+		<input type="email" name="email" id="email" placeholder="E-mail cim"
+			   onfocus="this.placeholder = ''" onblur="this.placeholder = 'E-mail cim'" required
+			   class="single-input">
+	</div>
+	<div class="mt-10">
+    <textarea name="leir" class="single-textarea" placeholder="Leírás" onfocus="this.placeholder = ''"
+			  onblur="this.placeholder = 'Leírás'" required></textarea>
+	</div>
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Regisztráció</button>
+		</form>
+
+	</div>
+		
+		
+</body>
+</html>

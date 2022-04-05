@@ -26,7 +26,7 @@ public class UserMapper implements RowMapper<User> {
         user.setCreatedDate(DateMapperHelper.getDateTime(rs, "created_date"));
         user.setLastLoggedIn(DateMapperHelper.getDateTime(rs, "last_logged_in"));
         user.setActive(rs.getBoolean("active"));
-        try {user.setRole(User.UserRole.valueOf(rs.getString("role")));} catch (Exception e) {}
+        try {user.setRoleName(User.UserRole.valueOf(rs.getString("role_name")));} catch (Exception e) {}
 
 
         return user;
