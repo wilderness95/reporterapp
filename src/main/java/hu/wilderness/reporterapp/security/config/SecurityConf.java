@@ -36,6 +36,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/login")
                 .failureHandler(usernameInUrlAuthenticationFailureHandler())
+                .successHandler(loginSuccesHandler())
                 .and()
                 .logout()
                 .logoutSuccessUrl("/login?logout")
@@ -58,5 +59,10 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
     @Bean
     public UsernameInUrlAuthenticationFailureHandler usernameInUrlAuthenticationFailureHandler() {
         return new UsernameInUrlAuthenticationFailureHandler();
+    }
+
+    @Bean
+    public LoginSuccesHandler loginSuccesHandler() {
+        return new LoginSuccesHandler();
     }
 }
