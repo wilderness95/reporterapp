@@ -15,29 +15,36 @@ import java.util.Date;
 public class Report {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private boolean active;
 
-    @Column(columnDefinition="TEXT")
-    private String data;
+    private String lastName;
+
+    private String firstName;
 
     private String county;
 
-    private String city;
-
     private String address;
-
-    private String name;
 
     private String email;
 
     private String caseType;
 
+    private Date notifiedDate;
+
+    private String message;
+
+    private Boolean isDanger;
+
+    private String img;
+
     private Date createdDate;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    private Boolean isAnonym;
+
+    private String ipAddress;
+
 }
+

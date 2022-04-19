@@ -1,14 +1,19 @@
 package hu.wilderness.reporterapp.controller;
 
+import hu.wilderness.reporterapp.domain.Report;
+import hu.wilderness.reporterapp.dto.RegistrationDto;
+import hu.wilderness.reporterapp.dto.ReportDto;
 import hu.wilderness.reporterapp.security.config.UsernameInUrlAuthenticationFailureHandler;
+import hu.wilderness.reporterapp.service.ReportService;
 import hu.wilderness.reporterapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -16,6 +21,8 @@ public class HomeController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    ReportService reportService;
 
     @RequestMapping("/")
     public String home(){
@@ -35,10 +42,6 @@ public class HomeController {
     }
 
 
-    @GetMapping("/report")
-    public String bloggers(){
-        return "report";
-    }
 
     @GetMapping("/info")
     public String stories(Model model){
@@ -46,8 +49,15 @@ public class HomeController {
         return "info";
     }
 
-    @RequestMapping("/registration")
-    public String registration(Model model){
-        return "registration";
+    @RequestMapping("/report")
+    public String report(Model model){
+        model.addAttribute("report", new ReportDto());
+        return "report";
+    }
+
+    @PostMapping(value = "/reg")
+    public String report(ReportDto reportDto, HttpServletRequest request, @RequestParam("image") MultipartFile multipartFile) {
+        reportService.createNew(reportDto, request, multipartFile);
+        return "redirect:/report";
     }
 }

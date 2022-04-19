@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hu" layout:decorate="~{layouts/main}">
+<html xmlns:th="http://www.thymeleaf.org" lang="en" layout:decorate="~{layouts/main}">
 <head>
 	<title></title>
 </head>
@@ -7,46 +7,47 @@
 
 	<div layout:fragment="loginContent">
 
-		<div class="col-md-3"></div>
-		<div class="col-md-6">
+		<div class="col-md-2"></div>
 
 
-
-			<h2>Bejelentések</h2>
-
-		<form name="registration"  class="form-group">
-			<h2 class="form-signin-heading">Kérjük adja meg az adatokat:</h2>
-			<input type="text" name="hely" id="hely" placeholder="Helység"
-				   onfocus="this.placeholder = ''" onblur="this.placeholder = 'Helység'" required
-				   class="single-input">
-	<div class="mt-10">
-		<input type="text" name="veznev" id="veznev" placeholder="Vezetéknév"
-			   onfocus="this.placeholder = ''" onblur="this.placeholder = 'Vezetéknév'" required
-			   class="single-input">
-	</div>
-	<div class="mt-10">
-		<input type="text" name="keresztn" id="keresztn" placeholder="Keresztnév"
-			   onfocus="this.placeholder = ''" onblur="this.placeholder = 'Keresztnév'" required
-			   class="single-input">
-	</div>
-
-	<div class="mt-10">
-		<input type="email" name="email" id="email" placeholder="E-mail cim"
-			   onfocus="this.placeholder = ''" onblur="this.placeholder = 'E-mail cim'" required
-			   class="single-input">
-	</div>
-	<div class="mt-10">
-    <textarea name="leir" class="single-textarea" placeholder="Leírás" onfocus="this.placeholder = ''"
-			  onblur="this.placeholder = 'Leírás'" required></textarea>
-	</div>
-			<button class="btn btn-lg btn-primary btn-block" type="submit">Regisztráció</button>
-		</form>
-
-	</div>
-		<div class="col-md-3"></div>
+		<div class="col-md-8">
 
 
-	</div>
+			<div class="card mt-2 mx-auto p-4 bg-light " >
+				<div class="card-body bg-light">
+					<div class="container">
+
+						<form id="report" name="report" th:action="@{/reg}" th:object="${report}" method="POST" enctype="multipart/form-data">
+							<div class="controls">
+								<div class="row">
+									<div class="col-md-3">
+										<label for="defSwitch">Névtelen bejelentés:</label>
+										<div class="material-switch pull-right">
+											<input class="primary-switch" id="defSwitch" th:field="*{isAnonym}" name="defSwitch" type="checkbox" onclick="switchFunc()"/>
+											<label for="defSwitch" ></label>
+										</div>
+									</div>
+								</div><br>
+								<div class="col-md-6">
+									<div class="form-group"><input id="lastName" type="text" th:field="*{lastName}" class="form-control" placeholder="Kérem adja meg a vezetéknevét" required="required" data-error="Firstname is required."></div>
+									<div class="form-group"><input id="firstName" type="text"  th:field="*{firstName}" class="form-control" placeholder="Kérem adja meg a keresztnevét" required="required" data-error="Lastname is required."></div>
+									<div class="form-group"><input id="county" type="text"  th:field="*{county}" class="form-control" placeholder="Kérem adja meg a megyét" required="required" data-error="Firstname is required."></div>
+									<div class="form-group"><input id="address" type="text" th:field="*{address}" class="form-control" placeholder="Kérem adja meg a pontos címet" required="required" data-error="Lastname is required."></div>
+									<div class="form-group"><input id="email" type="email"  th:field="*{email}" class="form-control" placeholder="Kérem adja meg az email címét" required="required" data-error="Valid email is required."></div>
+								<div class="form-group">	<label for="notifiedDate">Ekkor észleltem az esetet</label> <input type="date" id="notifiedDate" th:field="*{notifiedDate}" class="form-control"></div>
+									<div class="form-group"><label for="message">Üzenet</label> <textarea id="message" th:field="*{message}" class="form-control" placeholder="Write your message here." rows="4" required="required" data-error="Please, leave us a message."></textarea></div>
+									<div class="form-group"><label for="isDanger">Közvetlen életveszély áll fenn? </label> <input class="form-check-input" type="checkbox" value="" id="isDanger" th:field="*{isDanger}" ></div>
+									<div class="form-group"><label for="image"><strong>Tölts fel egy képet az állatról:</strong></label> <input type="file" id="image" name="image" accept="image/*"></div>
+									<div class="form-group"><button class="btn btn-primary" type="submit">Regisztráció</button></div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div> <!-- /.8 -->
+
+		</div>
+		<div class="col-md-2"></div>
 		
 		
 </body>

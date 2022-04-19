@@ -9,11 +9,10 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>Kis állat bejelentő</title>
 
-<!--	<link rel="megye" href="/static/img/megyeterkep.png" th:href="@{img/megyeterkep.png}"/>-->
 
 	<link rel="stylesheet" href="/static/css/blog.css" th:href="@{css/blog.css}"/>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
-		
+
 	<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css' />	
 	<link href='https://fonts.googleapis.com/css?family=Exo' rel='stylesheet' type='text/css' />
 	
@@ -24,11 +23,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">	</script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" ></script>
 
-	<script>
-		$.getJSON("https://api.ipify.org?format=json", function(data) {
-			$("#ip").html(data.ip);
-		})
-	</script>
+	<script th:src="@{js/scripts.js}"></script>
 </head>
 <body>
 

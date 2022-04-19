@@ -13,7 +13,7 @@ public class ReportJdbcDao extends BaseJdbcDao {
 
     @Override
     public String getTableName() {
-        return "token";
+        return "report";
     }
 
     public Report insert(Report report) {
@@ -21,15 +21,19 @@ public class ReportJdbcDao extends BaseJdbcDao {
 
         Map<String, Object> parameters = new HashMap();
         parameters.put("active", report.isActive());
-        parameters.put("data", report.getData());
+        parameters.put("last_name", report.getLastName());
+        parameters.put("first_name", report.getFirstName());
         parameters.put("county", report.getCounty());
-        parameters.put("city", report.getCity());
         parameters.put("address", report.getAddress());
-        parameters.put("name", report.getName());
         parameters.put("email", report.getEmail());
         parameters.put("case_type", report.getCaseType());
+        parameters.put("notified_date", report.getNotifiedDate());
+        parameters.put("message", report.getMessage());
+        parameters.put("is_danger", report.getIsDanger());
+        parameters.put("img", report.getImg());
         parameters.put("created_date", report.getCreatedDate());
-        parameters.put("user_id", report.getUser().getId());
+        parameters.put("is_anonym", report.getIsDanger());
+        parameters.put("ip_address", report.getImg());
 
         Number result = insert.executeAndReturnKey(parameters);
 
@@ -46,28 +50,36 @@ public class ReportJdbcDao extends BaseJdbcDao {
                 "update " + getTableName() + " " +
                         "set          " +
                         "        active=?, " +
-                        "        data=?, " +
+                        "        lastName=?, " +
+                        "        firstName=?, " +
                         "        county=?, " +
-                        "        city=?, " +
-                        "        address=?," +
-                        "        name=?," +
-                        "        email=?," +
+                        "        address=?, " +
+                        "        email=?, " +
                         "        case_type=?," +
-                        "        created_date=?," +
-                        "        user_id=?" +
+                        "        notified_date=?," +
+                        "        message=?," +
+                        "        is_danger=?," +
+                        "        img=?," +
+                        "        is_anonym=?," +
+                        "        ip_address=?," +
+                        "        created_date=?" +
                         "where " +
                         "        id=? ";
         Object[] parameters = {
                 report.isActive(),
-                report.getData(),
+                report.getLastName(),
+                report.getFirstName(),
                 report.getCounty(),
-                report.getCity(),
                 report.getAddress(),
-                report.getName(),
                 report.getEmail(),
                 report.getCaseType(),
-                report.getCreatedDate(),
-                report.getUser().getId()
+                report.getNotifiedDate(),
+                report.getMessage(),
+                report.getIsDanger(),
+                report.getImg(),
+                report.getIsAnonym(),
+                report.getIpAddress(),
+                report.getCreatedDate()
 
         };
         int result = jdbcTemplate.update(sql, parameters);

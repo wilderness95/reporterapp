@@ -16,15 +16,19 @@ public class ReportMapper implements RowMapper<Report> {
 
         report.setId(rs.getInt("id"));
         report.setActive(rs.getBoolean("active"));
-        report.setData(rs.getString("data"));
+        report.setLastName(rs.getString("last_name"));
+        report.setFirstName(rs.getString("first_name"));
         report.setCounty(rs.getString("county"));
-        report.setCity(rs.getString("city"));
         report.setAddress(rs.getString("address"));
-        report.setName(rs.getString("name"));
         report.setEmail(rs.getString("email"));
         report.setCaseType(rs.getString("case_type"));
+        report.setNotifiedDate(DateMapperHelper.getDateTime(rs, "notified_date"));
+        report.setMessage(rs.getString("message"));
+        report.setIsDanger(rs.getBoolean("is_danger"));
+        report.setImg(rs.getString("img"));
         report.setCreatedDate(DateMapperHelper.getDateTime(rs, "created_date"));
-        report.setUser(new User(rs.getInt("user_id")));
+        report.setIsDanger(rs.getBoolean("is_anonym"));
+        report.setImg(rs.getString("ip_address"));
 
         return report;
     }

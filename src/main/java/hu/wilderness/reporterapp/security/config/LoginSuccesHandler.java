@@ -23,7 +23,7 @@ Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorit
         if (roles.contains("ROLE_ADMIN")) {
             response.sendRedirect("/report");
         } else {
-            response.sendRedirect("/user");
+            response.sendRedirect("/info");
         }
     }
 
