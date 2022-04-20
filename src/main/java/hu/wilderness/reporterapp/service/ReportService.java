@@ -2,6 +2,7 @@ package hu.wilderness.reporterapp.service;
 
 import hu.wilderness.reporterapp.dataacces.dao.ReportJdbcDao;
 import hu.wilderness.reporterapp.domain.Report;
+import hu.wilderness.reporterapp.domain.Token;
 import hu.wilderness.reporterapp.domain.User;
 import hu.wilderness.reporterapp.dto.ReportDto;
 import hu.wilderness.reporterapp.utils.FileUploadUtil;
@@ -20,6 +21,7 @@ import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 public class ReportService {
@@ -33,13 +35,19 @@ public class ReportService {
     @Autowired
     ReportJdbcDao reportJdbcDao;
 
+    @Autowired
+    EmailService emailService;
+
+    @Autowired
+    TokenService tokenService;
+
     public Report createNew(ReportDto reportDto, HttpServletRequest request,MultipartFile multipartFile) {
         String fileName = getFileName(multipartFile);
         Report report = new Report();
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.map(reportDto, report);
 
-        report.setActive(true);
+        report.setActive(reportDto.getIsAnonym() ?  true : false);
         report.setLastName(reportDto.getLastName());
         report.setFirstName(reportDto.getFirstName());
         report.setCounty(reportDto.getCounty());
@@ -53,13 +61,18 @@ public class ReportService {
         report.setIsAnonym(reportDto.getIsAnonym());
         report.setIpAddress(getClientIp(request));
         report.setCreatedDate(new Date());
+        generateTokenAndSendMailToConfirm(report);
 
         report = save(report);
+
         try {
             uploadImage(report, fileName,multipartFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+
         log.debug("create a new report: " + report.toString());
         return report;
     }
@@ -113,5 +126,20 @@ public class ReportService {
         }
 
         return ipAddress;
+    }
+
+    public void generateTokenAndSendMailToConfirm(Report report){
+
+
+            if (!report.isActive()){
+                Token token = tokenService.createNew();
+                report.setToken(token);
+                emailService.sendConfirmationMail(report.getEmail(), token.getToken());
+            }else {
+            log.debug("Ez egy anonym bejelentés volt, nem szükséges a token létrehozása.");
+
+        }
+
+
     }
 }

@@ -34,6 +34,7 @@ public class ReportJdbcDao extends BaseJdbcDao {
         parameters.put("created_date", report.getCreatedDate());
         parameters.put("is_anonym", report.getIsDanger());
         parameters.put("ip_address", report.getImg());
+        if(report.getToken() != null) parameters.put("token_id", report.getToken().getId()); // ilyen eseteknél, ha objektumot szúrúnk be mindig figyelni kell rá, hogy már az insertnél levizsgáljuk nem-e null, így elkerülhető a NPE!!
 
         Number result = insert.executeAndReturnKey(parameters);
 
@@ -62,7 +63,8 @@ public class ReportJdbcDao extends BaseJdbcDao {
                         "        img=?," +
                         "        is_anonym=?," +
                         "        ip_address=?," +
-                        "        created_date=?" +
+                        "        created_date=?," +
+                        "        token_id=?" +
                         "where " +
                         "        id=? ";
         Object[] parameters = {
@@ -79,7 +81,8 @@ public class ReportJdbcDao extends BaseJdbcDao {
                 report.getImg(),
                 report.getIsAnonym(),
                 report.getIpAddress(),
-                report.getCreatedDate()
+                report.getCreatedDate(),
+                report.getToken().getId()
 
         };
         int result = jdbcTemplate.update(sql, parameters);

@@ -1,7 +1,7 @@
 package hu.wilderness.reporterapp.dataacces.mapper;
 
 import hu.wilderness.reporterapp.domain.Report;
-import hu.wilderness.reporterapp.domain.User;
+import hu.wilderness.reporterapp.domain.Token;
 import hu.wilderness.reporterapp.utils.DateMapperHelper;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -29,6 +29,7 @@ public class ReportMapper implements RowMapper<Report> {
         report.setCreatedDate(DateMapperHelper.getDateTime(rs, "created_date"));
         report.setIsDanger(rs.getBoolean("is_anonym"));
         report.setImg(rs.getString("ip_address"));
+        report.setToken(new Token(rs.getLong("token_id")));
 
         return report;
     }

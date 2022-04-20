@@ -30,6 +30,9 @@ public class EmailService {
 
         mailProperties.put("mail.smtp.auth", parameterService.getBooleanParameter("email.smtp.auth"));
         mailProperties.put("mail.smtp.starttls.enable", parameterService.getBooleanParameter("email.smtp.starttls"));
+        mailProperties.put("mail.smtp.starttls.enable.required", true);
+        mailProperties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+        mailProperties.put("mail.smtp.ssl.protocols", "TLSv1.2");
 
         mailSender.setJavaMailProperties(mailProperties);
         return mailSender;
@@ -57,4 +60,7 @@ public class EmailService {
         sendMsg(javaMailSender, address, subject, text);
     }
 
+    public void sendConfirmationMail(String address, String uuid) {
+        sendMail(address,"Kérjük erősítse meg bejelentését", "lari fari " + uuid + " ");
+    }
 }

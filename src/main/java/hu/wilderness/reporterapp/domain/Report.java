@@ -46,5 +46,9 @@ public class Report {
 
     private String ipAddress;
 
+    @OneToOne
+    @JoinColumn(name = "token_id", nullable = true)
+    private Token token;
+
 }
 

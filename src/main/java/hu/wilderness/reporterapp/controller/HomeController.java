@@ -58,6 +58,7 @@ public class HomeController {
     @PostMapping(value = "/reg")
     public String report(ReportDto reportDto, HttpServletRequest request, @RequestParam("image") MultipartFile multipartFile) {
         reportService.createNew(reportDto, request, multipartFile);
+
         return "redirect:/report";
     }
 }

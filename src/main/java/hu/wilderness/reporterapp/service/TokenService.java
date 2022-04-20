@@ -21,15 +21,14 @@ public class TokenService {
     @Autowired
     TokenJdbcDao tokenJdbcDao;
 
-    public Token createNew(User user) {
+    public Token createNew() {
         Token token = new Token();
         token.setToken(createNewToken());
         token.setActive(true);
         token.setCreatedAt(new Date());
         token.setExpiresAt(new Date());
-        token.setConfirmedAt(new Date());
+        //token.setConfirmedAt(new Date());
         token.setType(CONFIRMATION);
-        token.setUser(user);
         token = save(token);
         log.debug("create a new " + token.getType() + " token: " + token);
 

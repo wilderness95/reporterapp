@@ -36,7 +36,7 @@ public class UserService implements UserDetailsService {
     public void testToken() {
         User u = userJdbcDao.findByEmailAddress("teszt");
         log.debug(u.toString());
-        tokenService.createNew(u);
+        tokenService.createNew();
         log.debug("Sikeres Token létrehozás");
     }
 

@@ -13,6 +13,14 @@ import java.util.Date;
     @Entity
     public class Token {
 
+
+        public Token() {
+        }
+
+        public Token(long token_id) {
+        }
+
+
         public enum TokenType {
             CONFIRMATION
         }
@@ -38,7 +46,6 @@ import java.util.Date;
 
         private Date confirmedAt;
 
-        @JoinColumn(name = "user_id")
-        @ManyToOne
-        private User user;
+
+
 }
