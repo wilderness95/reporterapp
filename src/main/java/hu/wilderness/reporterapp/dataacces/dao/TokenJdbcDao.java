@@ -32,7 +32,7 @@ public class TokenJdbcDao extends BaseJdbcDao {
     }
 
     public Token findByToken(String token) {
-        String sql = "select * from" + getTableName() + " t where t.token = ?";
+        String sql = "select * from " + getTableName() + " t where t.token = ?";
         Object[] params = {token};
         try {
             Token t = jdbcTemplate.queryForObject(sql, params, new TokenMapper());
@@ -48,6 +48,7 @@ public class TokenJdbcDao extends BaseJdbcDao {
 
         Map<String, Object> parameters = new HashMap();
         parameters.put("active", t.isActive());
+        parameters.put("successful", t.isSuccessful());
         parameters.put("type", t.getType().toString());
         parameters.put("token", t.getToken());
         parameters.put("created_at", t.getCreatedAt());
@@ -69,20 +70,23 @@ public class TokenJdbcDao extends BaseJdbcDao {
                 "update " + getTableName() + " " +
                         "set          " +
                         "        active=?, " +
+                        "        successful=?, " +
                         "        type=?, " +
                         "        token=?, " +
                         "        created_at=?, " +
                         "        expires_at=?," +
-                        "        confirmed_at=?" +
+                        "        confirmed_at=? " +
                         "where " +
                         "        id=? ";
         Object[] parameters = {
                 t.isActive(),
+                t.isSuccessful(),
                 t.getType().toString(),
                 t.getToken(),
                 t.getCreatedAt(),
                 t.getExpiresAt(),
-                t.getConfirmedAt()
+                t.getConfirmedAt(),
+                t.getId()
         };
         int result = jdbcTemplate.update(sql, parameters);
         return t;

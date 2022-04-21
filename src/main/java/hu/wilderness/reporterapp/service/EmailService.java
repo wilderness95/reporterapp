@@ -30,9 +30,9 @@ public class EmailService {
 
         mailProperties.put("mail.smtp.auth", parameterService.getBooleanParameter("email.smtp.auth"));
         mailProperties.put("mail.smtp.starttls.enable", parameterService.getBooleanParameter("email.smtp.starttls"));
-        mailProperties.put("mail.smtp.starttls.enable.required", true);
-        mailProperties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-        mailProperties.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        mailProperties.put("mail.smtp.starttls.enable.required", parameterService.getBooleanParameter("email.smtp.starttls.required"));
+        mailProperties.put("mail.smtp.ssl.trust",parameterService.getStringParameter("email.smtp.ssl.trust"));
+        mailProperties.put("mail.smtp.ssl.protocols",parameterService.getStringParameter("email.smtp.ssl.protocols"));
 
         mailSender.setJavaMailProperties(mailProperties);
         return mailSender;
@@ -61,6 +61,6 @@ public class EmailService {
     }
 
     public void sendConfirmationMail(String address, String uuid) {
-        sendMail(address,"Kérjük erősítse meg bejelentését", "lari fari " + uuid + " ");
+        sendMail(address,"Kérjük erősítse meg bejelentését", "lari fari http://localhost:8080/emailconfirm/" + uuid + " ");
     }
 }

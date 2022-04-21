@@ -17,7 +17,8 @@ import java.util.Date;
         public Token() {
         }
 
-        public Token(long token_id) {
+        public Token(long id) {
+            this.id = id;
         }
 
 
@@ -30,6 +31,8 @@ import java.util.Date;
         private Long id;
 
         private boolean active;
+
+        private boolean successful;
 
         @Column
         @Enumerated(EnumType.STRING)

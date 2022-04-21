@@ -1,7 +1,9 @@
 package hu.wilderness.reporterapp.dataacces.dao;
 
 import hu.wilderness.reporterapp.dataacces.dao.parents.BaseJdbcDao;
+import hu.wilderness.reporterapp.dataacces.mapper.ReportMapper;
 import hu.wilderness.reporterapp.domain.Report;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -14,6 +16,18 @@ public class ReportJdbcDao extends BaseJdbcDao {
     @Override
     public String getTableName() {
         return "report";
+    }
+
+
+    public Report findByToken(long tokenId) {
+        String sql = "select * from " + getTableName() + " r where r.token_id = ?";
+        Object[] params = {tokenId};
+        try {
+            Report r = jdbcTemplate.queryForObject(sql, params, new ReportMapper());
+            return r;
+        } catch (DataAccessException e) {
+            return null;
+        }
     }
 
     public Report insert(Report report) {
@@ -32,8 +46,8 @@ public class ReportJdbcDao extends BaseJdbcDao {
         parameters.put("is_danger", report.getIsDanger());
         parameters.put("img", report.getImg());
         parameters.put("created_date", report.getCreatedDate());
-        parameters.put("is_anonym", report.getIsDanger());
-        parameters.put("ip_address", report.getImg());
+        parameters.put("is_anonym", report.getIsAnonym());
+        parameters.put("ip_address", report.getIpAddress());
         if(report.getToken() != null) parameters.put("token_id", report.getToken().getId()); // ilyen eseteknél, ha objektumot szúrúnk be mindig figyelni kell rá, hogy már az insertnél levizsgáljuk nem-e null, így elkerülhető a NPE!!
 
         Number result = insert.executeAndReturnKey(parameters);
@@ -48,11 +62,11 @@ public class ReportJdbcDao extends BaseJdbcDao {
         if (report.getId() == null) return null;
 
         String sql =
-                "update " + getTableName() + " " +
+                "update "+getTableName()+" " +
                         "set          " +
                         "        active=?, " +
-                        "        lastName=?, " +
-                        "        firstName=?, " +
+                        "        last_name=?, " +
+                        "        first_name=?, " +
                         "        county=?, " +
                         "        address=?, " +
                         "        email=?, " +
@@ -64,7 +78,7 @@ public class ReportJdbcDao extends BaseJdbcDao {
                         "        is_anonym=?," +
                         "        ip_address=?," +
                         "        created_date=?," +
-                        "        token_id=?" +
+                        "        token_id=? " +
                         "where " +
                         "        id=? ";
         Object[] parameters = {
@@ -82,7 +96,8 @@ public class ReportJdbcDao extends BaseJdbcDao {
                 report.getIsAnonym(),
                 report.getIpAddress(),
                 report.getCreatedDate(),
-                report.getToken().getId()
+                report.getToken()==null?null:report.getToken().getId(),
+                report.getId()
 
         };
         int result = jdbcTemplate.update(sql, parameters);

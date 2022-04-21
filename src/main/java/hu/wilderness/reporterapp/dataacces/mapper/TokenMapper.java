@@ -1,8 +1,7 @@
 package hu.wilderness.reporterapp.dataacces.mapper;
 
 import hu.wilderness.reporterapp.domain.Token;
-import hu.wilderness.reporterapp.domain.User;
-import hu.wilderness.reporterapp.utils.DateMapperHelper;
+import hu.wilderness.reporterapp.utils.DateHelper;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -16,11 +15,12 @@ public class TokenMapper implements RowMapper<Token> {
         Token token = new Token();
         token.setId(rs.getLong("id"));
         token.setActive(rs.getBoolean("active"));
+        token.setSuccessful(rs.getBoolean("successful"));
         try {token.setType(Token.TokenType.valueOf(rs.getString("type")));} catch (Exception e) {}
         token.setToken(rs.getString("token"));
-        token.setCreatedAt(DateMapperHelper.getDateTime(rs, "created_date"));
-        token.setExpiresAt(DateMapperHelper.getDateTime(rs, "expires_date"));
-        token.setConfirmedAt(DateMapperHelper.getDateTime(rs, "confirmed_date"));
+        token.setCreatedAt(DateHelper.getDateTime(rs, "created_at"));
+        token.setExpiresAt(DateHelper.getDateTime(rs, "expires_at"));
+        token.setConfirmedAt(DateHelper.getDateTime(rs, "confirmed_at"));
         return token;
     }
 }

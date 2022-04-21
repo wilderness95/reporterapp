@@ -1,7 +1,5 @@
 package hu.wilderness.reporterapp.controller;
 
-import hu.wilderness.reporterapp.domain.Report;
-import hu.wilderness.reporterapp.dto.RegistrationDto;
 import hu.wilderness.reporterapp.dto.ReportDto;
 import hu.wilderness.reporterapp.security.config.UsernameInUrlAuthenticationFailureHandler;
 import hu.wilderness.reporterapp.service.ReportService;
@@ -60,5 +58,22 @@ public class HomeController {
         reportService.createNew(reportDto, request, multipartFile);
 
         return "redirect:/report";
+    }
+
+
+
+    @RequestMapping(value = "/emailconfirm/{uuId}",method = RequestMethod.GET)
+    public ModelAndView emailConfirm(@PathVariable String uuId){
+        String message;
+        try {
+            reportService.setSuccessfulState(uuId);
+        } catch (Exception e) {
+            System.out.println("hiba: "+ e);
+            message = e.getMessage();
+        }
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("/email/emailconfirmed");
+        return mv;
     }
 }
