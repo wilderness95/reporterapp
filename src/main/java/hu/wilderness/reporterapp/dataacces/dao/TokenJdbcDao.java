@@ -42,6 +42,17 @@ public class TokenJdbcDao extends BaseJdbcDao {
         }
     }
 
+    public Token findByTokenAndActive(String token, Boolean active){
+        String sql = "select * from " + getTableName() + " t where t.token and t.active = ?";
+        Object[] params = {token, active};
+        try {
+                Token t = jdbcTemplate.queryForObject(sql, params, new TokenMapper());
+            return t;
+        } catch (DataAccessException e) {
+            return null;
+        }
+    }
+
 
     public Token insert(Token t) {
 

@@ -7,6 +7,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -28,6 +29,12 @@ public class ReportJdbcDao extends BaseJdbcDao {
         } catch (DataAccessException e) {
             return null;
         }
+    }
+
+    public List<Report> findAll(){
+        String sql = "select * from " + getTableName();
+        List<Report> result = jdbcTemplate.query(sql, new ReportMapper());
+        return  result;
     }
 
     public Report insert(Report report) {

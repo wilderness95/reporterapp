@@ -23,7 +23,8 @@ public class HomeController {
     ReportService reportService;
 
     @RequestMapping("/")
-    public String home(){
+    public String home(Model model){
+        model.addAttribute("reports",reportService.getAllReports());
         return "index";
     }
 
@@ -46,6 +47,8 @@ public class HomeController {
         model.addAttribute("users",userService.listUsers());
         return "info";
     }
+
+
 
     @RequestMapping("/report")
     public String report(Model model){

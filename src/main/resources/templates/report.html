@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en" layout:decorate="~{layouts/main}">
+<html xmlns:th="http://www.thymeleaf.org" lang="en" layout:decorate="~{layouts/main.html}">
 <head>
+	<link rel="stylesheet" type="text/css" href="../static/css/blog.css"/>
 	<title></title>
 </head>
 <body>
@@ -21,10 +22,10 @@
 							<div class="controls">
 								<div class="row">
 									<div class="col-md-3">
-										<label for="defSwitch">Névtelen bejelentés:</label>
+										<label for="defSwitch">Névtelen bejelentés: </label>
 										<div class="material-switch pull-right">
-											<input class="primary-switch" id="defSwitch" th:field="*{isAnonym}" name="defSwitch" type="checkbox" onclick="switchFunc()"/>
-											<label for="defSwitch" ></label>
+											<input id="defSwitch" th:field="*{isAnonym}" name="defSwitch" type="checkbox" onclick="switchFunc()"/>
+											<label for="defSwitch" class="label-primary" ></label>
 										</div>
 									</div>
 								</div><br>
@@ -34,11 +35,13 @@
 									<div class="form-group"><input id="county" type="text"  th:field="*{county}" class="form-control" placeholder="Kérem adja meg a megyét" required="required" data-error="Firstname is required."></div>
 									<div class="form-group"><input id="address" type="text" th:field="*{address}" class="form-control" placeholder="Kérem adja meg a pontos címet" required="required" data-error="Lastname is required."></div>
 									<div class="form-group"><input id="email" type="email"  th:field="*{email}" class="form-control" placeholder="Kérem adja meg az email címét" required="required" data-error="Valid email is required."></div>
-								<div class="form-group">	<label for="notifiedDate">Ekkor észleltem az esetet</label> <input type="date" id="notifiedDate" th:field="*{notifiedDate}" class="form-control"></div>
+								<div class="form-group">	<label for="notifiedDate">Ekkor észleltem az esetet</label> <input type="date" id="notifiedDate" required="required" th:field="*{notifiedDate}" class="form-control"></div>
 									<div class="form-group"><label for="message">Üzenet</label> <textarea id="message" th:field="*{message}" class="form-control" placeholder="Write your message here." rows="4" required="required" data-error="Please, leave us a message."></textarea></div>
 									<div class="form-group"><label for="isDanger">Közvetlen életveszély áll fenn? </label> <input class="form-check-input" type="checkbox" value="" id="isDanger" th:field="*{isDanger}" ></div>
+
 									<div class="form-group"><label for="image"><strong>Tölts fel egy képet az állatról:</strong></label> <input type="file" id="image" name="image" accept="image/*"></div>
-									<div class="form-group"><button class="btn btn-primary" type="submit">Regisztráció</button></div>
+									<div class="form-group"><label for="isDanger">Elfogadom a felhasználási feltételeket </label> <input class="form-check-input" type="checkbox" value="" id="isAccept" ></div>
+									<div class="form-group"><button class="btn btn-primary" type="submit">Elküld</button></div>
 								</div>
 							</div>
 						</form>
@@ -48,7 +51,9 @@
 
 		</div>
 		<div class="col-md-2"></div>
+	</div>
+	</div>
 		
-		
+
 </body>
 </html>

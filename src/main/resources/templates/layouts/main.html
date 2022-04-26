@@ -23,27 +23,20 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">	</script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" ></script>
 
-	<script th:src="@{js/scripts.js}"></script>
+
 </head>
 <body>
 
 	<div class="container">
-  		 
+
 		<nav class="navbar navbar-default">
 		    <div class="container-fluid">
 		       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				    <ul class="nav navbar-nav">
 				        <li class="active"><a href="/">Kezdőoldal</a></li>
-				        <li class=""><a href="/info">Információ</a></li>
 				        <li class=""><a href="/report">Bejelentés</a></li>
-						<li class=""><a href="/report">Admin</a></li>
 				    </ul>
 				    <div class="navbar-text navbar-right">
-				    Üdvözlünk <span sec:authentication="name">Anonymous </span>
-			           <form sec:authorize="isAuthenticated()" id="frmlogout" th:action="@{/logout}" method="post" class="form-inline">
-
-						   | <a href="javascript:{}" onclick="document.getElementById('frmlogout').submit(); return false;">Kijelentkezés</a>
-				      </form>
 				    </div>
 				</div>
 		    </div>
@@ -59,6 +52,6 @@
 	
 	</div>
 
-
+	<script th:src="@{js/scripts.js}"></script>
 </body>
 </html>

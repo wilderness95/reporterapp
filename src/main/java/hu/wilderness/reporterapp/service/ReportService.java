@@ -20,7 +20,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class ReportService {
@@ -93,6 +95,15 @@ public class ReportService {
         return report;
     }
 
+    public Report getReport(long tokenId) {
+        return reportJdbcDao.findByToken(tokenId);
+    }
+
+    public List<Report> getAllReports() {
+        return reportJdbcDao.findAll();
+
+    }
+
     public String getFileName(MultipartFile multipartFile) {
         return StringUtils.cleanPath(multipartFile.getOriginalFilename());
     }
@@ -144,32 +155,32 @@ public class ReportService {
             log.debug("Ez egy anonym bejelentés volt, nem szükséges a token létrehozása.");
 
         }
+    }
 
-
+    public Report setActiveState(Report report,Boolean active){
+        report.setActive(active);
+        return save(report);
     }
 
     public void setSuccessfulState(String tokenUuid) {
-        System.out.println("kapott token uid: " + tokenUuid);
-        Token token = tokenJdbcDao.findByToken(tokenUuid);
-        System.out.println(token.toString());
-        Report report = reportJdbcDao.findByToken(token.getId());
+        Token token = tokenService.getToken(tokenUuid, true);
+        Report report = getReport(token.getId());
         Date currentDate = new Date();
-        if (tokenService.isExpired(token)) {
-            token.setActive(false);
-            token.setConfirmedAt(currentDate);
-            token.setSuccessful(true);
-            report.setActive(true);
-            save(report);
-            tokenService.save(token);
+
+        if(token.isActive() && !token.isSuccessful()){
+            tokenService.setActiveAndSuccessfulDate(token,false,true,currentDate);
+            setActiveState(report,true);
             log.debug("A megerősítés sikeres volt....");
-        } else {
-            token.setActive(false);
-            token.setConfirmedAt(currentDate);
-            token.setSuccessful(false);
-            report.setActive(false);
-            save(report);
-            tokenService.save(token);
+
+        }else if(report.isActive()){
+            log.debug("A megerősítés már sikeres volt");
+        }
+        else{
+            setActiveState(report,false);
             log.debug("A megerősítés sikertelen volt...");
         }
     }
+
+
+
 }

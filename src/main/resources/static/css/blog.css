@@ -57,7 +57,6 @@ address {
 .navbar-default .navbar-collapse, .navbar-default .navbar-form {
     border-color: #c7b7d6;
 }
-
 .material-switch > input[type="checkbox"] {
     display: none;
 }
@@ -102,3 +101,5 @@ address {
     background: inherit;
     left: 20px;
 }
+
+

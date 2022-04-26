@@ -7,6 +7,31 @@
 
 	<div layout:fragment="loginContent">
 
+		<p>Bejelentések:</p>
+
+		<table class="table table-striped">
+			<thead>
+			<tr>
+				<td>Username</td>
+				<td>Jelszó</td>
+				<td>Role</td>
+				<td>Aktiv</td>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="report : ${reports}">
+				<td th:text="${report.email}"></td>
+				<td th:text="${report.lastName}"></td>
+				<td th:text="${report.firstName}"></td>
+				<td th:text="${report.county}"></td>
+				<td th:text="${report.address}"></td>
+				<td th:text="${report.notifiedDate}"></td>
+				<td th:text="${report.message}"></td>
+				<td th:text="${report.isDanger}"></td>
+			</tr>
+			</tbody>
+		</table>
+
 	</div>
 
 </body>

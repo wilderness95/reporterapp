@@ -27,6 +27,7 @@ public class UsernameInUrlAuthenticationFailureHandler extends SimpleUrlAuthenti
         String usernameParameter =
                 UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY;
         String lastUserName = request.getParameter(usernameParameter);
+        System.out.println(lastUserName);
 
         HttpSession session = request.getSession(false);
         if (session != null || isAllowSessionCreation()) {
