@@ -1,15 +1,15 @@
 package hu.wilderness.reporterapp.dto;
 
+import hu.wilderness.reporterapp.domain.User;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
-
 @Getter
 @Setter
 @ToString
-public class RegistrationDto {
+public class UserDto {
 
     @NotNull
     private String firstName;
@@ -18,12 +18,14 @@ public class RegistrationDto {
     private String lastName;
 
     @NotNull
-    private String role;
+    private String email;
+
+    @NotNull
+    private String phoneNumber;
 
     @NotNull
     private String county;
 
     @NotNull
-    private String email;
-
+    private String role;
 }

@@ -18,14 +18,15 @@ public class UserMapper implements RowMapper<User> {
         User user = new User();
 
         user.setId(rs.getInt("id"));
-        user.setName(rs.getString("name"));
-        user.setNickName(rs.getString("nick_name"));
-        user.setBirthDate(DateHelper.getDateTime(rs, "birth_date"));
-        user.setPassword(rs.getString("password"));
+        user.setFirstName(rs.getString("first_name"));
+        user.setLastName(rs.getString("last_name"));
         user.setEmail(rs.getString("email"));
+        user.setPhoneNumber(rs.getString("phone_number"));
+        user.setPassword(rs.getString("password"));
+        user.setCounty(rs.getString("county"));
+        user.setActive(rs.getBoolean("active"));
         user.setCreatedDate(DateHelper.getDateTime(rs, "created_date"));
         user.setLastLoggedIn(DateHelper.getDateTime(rs, "last_logged_in"));
-        user.setActive(rs.getBoolean("active"));
         try {user.setRoleName(User.UserRole.valueOf(rs.getString("role_name")));} catch (Exception e) {}
 
 

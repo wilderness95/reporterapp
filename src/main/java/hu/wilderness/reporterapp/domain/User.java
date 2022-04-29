@@ -24,17 +24,17 @@ public class User {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
-    private String name;
+    private String lastName;
 
-    private String nickName;
+    private String firstName;
 
-    private Date birthDate;
+    private String email;
 
-    @Column( nullable=false )
+    private String phoneNumber;
+
     private String password;
 
-    @Column( nullable=false )
-    private String email;
+    private String county;
 
     private Date createdDate;
 

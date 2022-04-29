@@ -5,6 +5,7 @@ import hu.wilderness.reporterapp.dataacces.dao.TokenJdbcDao;
 import hu.wilderness.reporterapp.domain.Report;
 import hu.wilderness.reporterapp.domain.Token;
 import hu.wilderness.reporterapp.dto.ReportDto;
+import hu.wilderness.reporterapp.exception.ReporterException;
 import hu.wilderness.reporterapp.utils.FileUploadUtil;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -70,8 +71,11 @@ public class ReportService {
         report.setIpAddress(getClientIp(request));
         report.setCreatedDate(new Date());
         generateTokenAndSendMailToConfirm(report);
-
         report = save(report);
+
+
+
+
 
         try {
             uploadImage(report, fileName, multipartFile);
@@ -146,9 +150,8 @@ public class ReportService {
 
     public void generateTokenAndSendMailToConfirm(Report report) {
 
-
         if (!report.isActive()) {
-            Token token = tokenService.createNew();
+            Token token = tokenService.createNew("CONFIRMATION");
             report.setToken(token);
             emailService.sendConfirmationMail(report.getEmail(), token.getToken());
         } else {
@@ -163,7 +166,7 @@ public class ReportService {
     }
 
     public void setSuccessfulState(String tokenUuid) {
-        Token token = tokenService.getToken(tokenUuid, true);
+       Token token = tokenService.getToken(tokenUuid);
         Report report = getReport(token.getId());
         Date currentDate = new Date();
 

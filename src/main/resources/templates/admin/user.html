@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="hu" layout:decorate="~{admin/main}">
+<head>
+    <title></title>
+</head>
+<body>
+
+<div layout:fragment="loginContent">
+
+    <div class="container">
+        <div class="panel-heading">
+            <h1 class="pb-2 border-bottom row">
+                <span class="col-sm-10 pb-4">Egyesületi tagok</span>
+                <span class="col-sm-2 text-sm-right pb-4">
+            <a href="/admin/newUser" class="btn btn-primary btn-outline-primary d-block d-sm-inline-block">Új tag hozzáadása</a>
+        </span>
+            </h1>
+        </div>
+        <div class="panel-body">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Vezetéknév</th>
+                    <th>Keresztnév</th>
+                    <th>Email</th>
+                    <th>Szerepkör</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>fdsf</td>
+                    <td>fds</td>
+                    <td>fdsf</td>
+                    <td>fdsf</td>
+                    <td>
+                        <button  class="btn btn-danger">Részletek</button>
+                        <button  class="btn btn-danger">Módosít</button>
+                        <button  class="btn btn-info" style="margin-left: 10px">Töröl</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

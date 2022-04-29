@@ -23,7 +23,9 @@ import java.util.Date;
 
 
         public enum TokenType {
-            CONFIRMATION
+            CONFIRMATION,
+            FIRSTPASSWORD,
+            RESETPASSWORD
         }
 
         @Id
@@ -48,6 +50,9 @@ import java.util.Date;
         private Date expiresAt;
 
         private Date confirmedAt;
+
+        @ManyToOne
+        private User user;
 
 
 

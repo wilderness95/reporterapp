@@ -2,8 +2,12 @@ package hu.wilderness.reporterapp.service;
 
 
 import hu.wilderness.reporterapp.dataacces.dao.UserJdbcDao;
+import hu.wilderness.reporterapp.domain.Report;
+import hu.wilderness.reporterapp.domain.Token;
 import hu.wilderness.reporterapp.domain.User;
 import hu.wilderness.reporterapp.dto.RegistrationDto;
+import hu.wilderness.reporterapp.dto.UserDto;
+import hu.wilderness.reporterapp.utils.passwordGenerator;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 import java.security.SecureRandom;
 import java.util.Date;
@@ -28,17 +33,14 @@ public class UserService implements UserDetailsService {
     @Autowired
     UserJdbcDao userJdbcDao;
 
+    @Autowired
+    EmailService emailService;
+
 
     //TODO sec conf-ban kiszervezni
     BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(10, new SecureRandom());
 
 
-    public void testToken() {
-        User u = userJdbcDao.findByEmailAddress("teszt");
-        log.debug(u.toString());
-        tokenService.createNew();
-        log.debug("Sikeres Token létrehozás");
-    }
 
     public List<User> listUsers() {
 //        Object user = SecurityContextHolder.getContext()
@@ -49,23 +51,63 @@ public class UserService implements UserDetailsService {
         return userList;
     }
 
+    public void sendActivationEmailForUser(User user){
+        Token token = tokenService.createNew("FIRSTPASSWORD");
+        token.setUser(user);
+        tokenService.save(token);
+        emailService.sendRequestMailToActivateAccount(user.getEmail(),token.getToken());
+    }
 
-    public User createNew(RegistrationDto registrationDto) {
+    public void setUserActive(User user, Boolean active){
+        user.setActive(active);
+        save(user);
+    }
+
+
+    public void setSuccessfulState(String tokenUuid) {
+        Token token = tokenService.getToken(tokenUuid);
+        System.out.println("token:    " +token.toString());
+        User user = getUserByToken(token.getId());
+        System.out.println(user.toString());
+        Date currentDate = new Date();
+
+        if(token.isActive() && !token.isSuccessful()){
+            tokenService.setActiveAndSuccessfulDate(token,false,true,currentDate);
+            setUserActive(user,true);
+            log.debug("A megerősítés sikeres volt....");
+
+        }else if(user.getActive()){
+            log.debug("A megerősítés már sikeres volt");
+        }
+        else{
+            setUserActive(user,false);
+            log.debug("A megerősítés sikertelen volt...");
+        }
+    }
+
+    private User getUserByToken(Long id) { return userJdbcDao.findByToken(id);
+    }
+
+    //TODO ellenőrizni, hogy a mail cím létezik-e már
+    public User createNew(UserDto userDto) {
         User user = new User();
         ModelMapper modelMapper = new ModelMapper();
-        modelMapper.map(registrationDto, user);
+        modelMapper.map(userDto, user);
 
-        user.setName(registrationDto.getName());
-        user.setNickName(registrationDto.getNickName());
-        user.setEmail(registrationDto.getEmail());
-//	        user.setPassword(registrationDto.getPassword());
-        user.setPassword(bCryptPasswordEncoder.encode(registrationDto.getPassword()));
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        user.setEmail(userDto.getEmail());
+        user.setPhoneNumber(userDto.getPhoneNumber());
+        user.setCounty(userDto.getCounty());
+        user.setRoleName( userDto.getRole().equals("ROLE_ADMIN") ? User.UserRole.ROLE_ADMIN : User.UserRole.ROLE_USER);
+        user.setPassword(bCryptPasswordEncoder.encode(passwordGenerator.generateRandomPassword(8)));
         user.setActive(false);
         user.setCreatedDate(new Date());
-        user.setBirthDate(null);
         user.setLastLoggedIn(null);
 
         user = save(user);
+
+        sendActivationEmailForUser(user);
         log.debug("create a new user: " + user.toString());
         return user;
     }

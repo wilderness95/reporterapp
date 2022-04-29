@@ -3,6 +3,9 @@ package hu.wilderness.reporterapp.service;
 
 import hu.wilderness.reporterapp.dataacces.dao.TokenJdbcDao;
 import hu.wilderness.reporterapp.domain.Token;
+import hu.wilderness.reporterapp.domain.User;
+import hu.wilderness.reporterapp.exception.ErrorConstant;
+import hu.wilderness.reporterapp.exception.ReporterException;
 import hu.wilderness.reporterapp.utils.DateHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.UUID;
 
-import static hu.wilderness.reporterapp.domain.Token.TokenType.CONFIRMATION;
+import static hu.wilderness.reporterapp.domain.Token.TokenType.*;
 
 @Service
 public class TokenService {
@@ -21,26 +24,35 @@ public class TokenService {
     @Autowired
     TokenJdbcDao tokenJdbcDao;
 
-    public Token createNew() {
+    public Token createNew(String type) {
         Token token = new Token();
         token.setToken(createNewToken());
         token.setActive(true);
         token.setSuccessful(false);
         token.setCreatedAt(new Date());
         token.setExpiresAt(DateHelper.addigHoursToDate(new Date(), 4));
-        token.setType(CONFIRMATION);
+        if (type.equals("CONFIRMATION")) {
+            token.setType(Token.TokenType.CONFIRMATION);
+        } else if (type.equals("FIRSTPASSWORD")) {
+            token.setType(Token.TokenType.FIRSTPASSWORD);
+        } else if (type.equals("RESETPASSWORD")) {
+            token.setType(Token.TokenType.RESETPASSWORD);
+        }
+
         token = save(token);
         log.debug("create a new " + token.getType() + " token: " + token);
 
         return token;
 
     }
-public Token setActiveAndSuccessfulDate(Token token,Boolean active, Boolean successful, Date currentDate){
+
+    public Token setActiveAndSuccessfulDate(Token token, Boolean active, Boolean successful, Date currentDate) {
         token.setActive(active);
         token.setSuccessful(successful);
         token.setConfirmedAt(currentDate);
         return save(token);
-}
+    }
+
 
     private String createNewToken() {
         return UUID.randomUUID().toString();
@@ -57,21 +69,21 @@ public Token setActiveAndSuccessfulDate(Token token,Boolean active, Boolean succ
         return token;
     }
 
-    public Token getToken(String tokenUuid, Boolean active){
+    public Token getToken(String tokenUuid) {
         Token token = tokenJdbcDao.findByToken(tokenUuid);
         if (isNotExpiredAndActive(token) && !token.isSuccessful())
             return token;
-        else if (!isNotExpiredAndActive(token) && token.isSuccessful()){
+        else if (!isNotExpiredAndActive(token) && token.isSuccessful()) {
+            //throw  new ReporterException(ErrorConstant.TOKEN_IS_ALREADY_ACTIVATED);
             return token;
-        }
-        else {
-//TODO token is expired exception
-            return setActiveAndSuccessfulDate(token,false,false, new Date());
+        } else {
+            return setActiveAndSuccessfulDate(token, false, false, new Date());
+            //  throw new ReporterException(ErrorConstant.TOKEN_IS_EXPIRED);
         }
     }
 
-    public Token getActiveToken(String tokenUuid){
-        return tokenJdbcDao.findByTokenAndActive(tokenUuid,true);
+    public Token getActiveToken(String tokenUuid) {
+        return tokenJdbcDao.findByTokenAndActive(tokenUuid, true);
     }
 
     public Boolean isNotExpiredAndActive(Token token) {
@@ -84,4 +96,6 @@ public Token setActiveAndSuccessfulDate(Token token,Boolean active, Boolean succ
             return false;
         }
     }
+
+
 }

@@ -65,7 +65,7 @@ public class TokenJdbcDao extends BaseJdbcDao {
         parameters.put("created_at", t.getCreatedAt());
         parameters.put("expires_at", t.getExpiresAt());
         parameters.put("confirmed_at", t.getConfirmedAt());
-
+        if(t.getUser()!=null)parameters.put("user_id", t.getUser().getId());
         Number result = insert.executeAndReturnKey(parameters);
 
         t.setId(result.longValue());
@@ -86,7 +86,8 @@ public class TokenJdbcDao extends BaseJdbcDao {
                         "        token=?, " +
                         "        created_at=?, " +
                         "        expires_at=?," +
-                        "        confirmed_at=? " +
+                        "        confirmed_at=?, " +
+                        "        user_id=? " +
                         "where " +
                         "        id=? ";
         Object[] parameters = {
@@ -97,9 +98,11 @@ public class TokenJdbcDao extends BaseJdbcDao {
                 t.getCreatedAt(),
                 t.getExpiresAt(),
                 t.getConfirmedAt(),
+                t.getUser()==null?null:t.getUser().getId(),
                 t.getId()
         };
         int result = jdbcTemplate.update(sql, parameters);
+        System.out.println(sql);
         return t;
     }
 }

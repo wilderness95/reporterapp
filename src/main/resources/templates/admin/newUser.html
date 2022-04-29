@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="hu" layout:decorate="~{admin/main}">
+<head>
+    <title></title>
+</head>
+<body>
+
+<div layout:fragment="loginContent">
+
+    <div class="col-md-2"></div>
+
+
+    <div class="col-md-8">
+
+
+        <div class="card mt-2 mx-auto p-4 bg-light " >
+            <div class="card-body bg-light">
+                <div class="container">
+
+                    <form id="newUser" name="newUser" th:action="@{/addUser}" th:object="${user}" method="POST" enctype="multipart/form-data">
+                        <div class="controls">
+                            <div class="row">
+                            </div><br>
+                            <div class="col-md-6">
+                                <div class="form-group"><input id="name" type="text" th:field="*{firstName}" class="form-control" placeholder="Kérem adja meg a vezetéknevét" required="required" data-error="Firstname is required."></div>
+                                <div class="form-group"><input id="nickName" type="text"  th:field="*{lastName}" class="form-control" placeholder="Kérem adja meg a keresztnevét" required="required" data-error="Lastname is required."></div>
+                                <div class="form-group"><input id="email" type="email"  th:field="*{email}" class="form-control" placeholder="Kérem adja meg az email címét" required="required" data-error="Valid email is required."></div>
+                                <div class="form-group"><input id="phoneNumber" type="text"  th:field="*{phoneNumber}" class="form-control" placeholder="Kérem adja meg az email címét" required="required" data-error="Valid email is required."></div>
+                                <div class="form-group"><input id="county" type="text"  th:field="*{county}" class="form-control" placeholder="Kérem adja meg az email címét" required="required" data-error="Valid email is required."></div>
+                                <div class="form-group"> <select id="role" type="text" th:field="*{role}">
+                                    <option value="ROLE_ADMIN">admin</option>
+                                    <option value="ROLE_USER">user</option>
+                                </select></div>
+                                <div class="form-group"><button class="btn btn-primary" type="submit">Elküld</button></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div> <!-- /.8 -->
+
+    </div>
+    <div class="col-md-2"></div>
+</div>
+    </div>
+</div>
+
+</body>
+</html>

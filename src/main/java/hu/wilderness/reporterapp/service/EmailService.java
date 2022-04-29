@@ -63,4 +63,8 @@ public class EmailService {
     public void sendConfirmationMail(String address, String uuid) {
         sendMail(address,"Kérjük erősítse meg bejelentését", "lari fari http://localhost:8080/emailconfirm/" + uuid + " ");
     }
+
+    public void sendRequestMailToActivateAccount(String address, String uuid) {
+        sendMail(address,"Kérjük a következő linkre kattintva álítson be új jelszót ", "lari fari http://localhost:8080/admin/setpassword/" + uuid + " ");
+    }
 }

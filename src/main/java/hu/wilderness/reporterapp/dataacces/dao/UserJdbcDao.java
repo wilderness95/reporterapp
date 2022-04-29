@@ -1,7 +1,9 @@
 package hu.wilderness.reporterapp.dataacces.dao;
 
 import hu.wilderness.reporterapp.dataacces.dao.parents.BaseJdbcDao;
+import hu.wilderness.reporterapp.dataacces.mapper.ReportMapper;
 import hu.wilderness.reporterapp.dataacces.mapper.UserMapper;
+import hu.wilderness.reporterapp.domain.Report;
 import hu.wilderness.reporterapp.domain.User;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,16 @@ public class UserJdbcDao extends BaseJdbcDao {
         return "user";
     }
 
+    public User findByToken(long tokenId) {
+        String sql = "select * from " + getTableName() + " u where u.token_id = ?";
+        Object[] params = {tokenId};
+        try {
+            User u = jdbcTemplate.queryForObject(sql, params, new UserMapper());
+            return u;
+        } catch (DataAccessException e) {
+            return null;
+        }
+    }
 
     public User findByEmailAddress(String emailAddress){
         String sql = "select * from " + getTableName() + " u where u.email = ? ";
@@ -38,14 +50,15 @@ public class UserJdbcDao extends BaseJdbcDao {
 
     public User insert(User u) {
         Map<String, Object> parameters = new HashMap();
-        parameters.put("name", u.getName());
-        parameters.put("nick_name", u.getNickName());
-        parameters.put("birth_date", u.getBirthDate());
-        parameters.put("password", u.getPassword());
+        parameters.put("first_name", u.getFirstName());
+        parameters.put("last_name", u.getLastName());
         parameters.put("email", u.getEmail());
+        parameters.put("phone_number", u.getPhoneNumber());
+        parameters.put("password", u.getPassword());
+        parameters.put("county",u.getCounty());
+        parameters.put("active", u.getActive());
         parameters.put("created_date", u.getCreatedDate());
         parameters.put("last_logged_in", u.getLastLoggedIn());
-        parameters.put("active", u.getActive());
         parameters.put("role_name", u.getRoleName());
 
 
@@ -60,28 +73,30 @@ public class UserJdbcDao extends BaseJdbcDao {
             return null;
 
         String sql = "update " + getTableName() + " set          " +
-                "        name=?, " +
-                "        nick_name=?, " +
-                "        birth_date=?, " +
-                "        password=?, " +
+                "        first_name=?, " +
+                "        last_name=?, " +
                 "        email=?, " +
+                "        phone_number=?, " +
+                "        password=?, " +
+                "        county=?, " +
+                "        active=?, " +
                 "        created_date=?, " +
                 "        last_logged_in=?, " +
-                "        active=?, " +
                 "        role_name=?   " +
                 "where " +
                 "        id=? ";
         Object[] parameters = {
-                u.getName(),
-                u.getNickName(),
-                u.getBirthDate(),
-                u.getPassword(),
+                u.getFirstName(),
+                u.getLastName(),
                 u.getEmail(),
+                u.getPhoneNumber(),
+                u.getPassword(),
+                u.getCounty(),
+                u.getActive(),
                 u.getCreatedDate(),
                 u.getLastLoggedIn(),
-                u.getActive(),
-                u.getId(),
-                u.getRoleName()
+                u.getRoleName(),
+                u.getId()
         };
         int result = jdbcTemplate.update(sql, parameters);
         return u;
