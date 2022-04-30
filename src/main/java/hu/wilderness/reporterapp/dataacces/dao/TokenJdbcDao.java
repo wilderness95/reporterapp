@@ -3,8 +3,12 @@ package hu.wilderness.reporterapp.dataacces.dao;
 
 import hu.wilderness.reporterapp.dataacces.dao.parents.BaseJdbcDao;
 import hu.wilderness.reporterapp.dataacces.mapper.TokenMapper;
+import hu.wilderness.reporterapp.dataacces.mapper.UserMapper;
 import hu.wilderness.reporterapp.domain.Token;
+import hu.wilderness.reporterapp.domain.User;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -24,15 +28,11 @@ public class TokenJdbcDao extends BaseJdbcDao {
         return new Token();
     }
 
-    public int setActiveState(String token, boolean activeState) {
-        String sql = "update " + getTableName() + " set active = ? where token = ?";
-        Object[] params = {activeState, token};
-        int result = jdbcTemplate.update(sql, params);
-        return result;
-    }
+
 
     public Token findByToken(String token) {
         String sql = "select * from " + getTableName() + " t where t.token = ?";
+        System.out.println(sql);
         Object[] params = {token};
         try {
             Token t = jdbcTemplate.queryForObject(sql, params, new TokenMapper());
@@ -43,7 +43,7 @@ public class TokenJdbcDao extends BaseJdbcDao {
     }
 
     public Token findByTokenAndActive(String token, Boolean active){
-        String sql = "select * from " + getTableName() + " t where t.token and t.active = ?";
+        String sql = "select * from " + getTableName() + " t where t.token = ? and t.active = ?";
         Object[] params = {token, active};
         try {
                 Token t = jdbcTemplate.queryForObject(sql, params, new TokenMapper());
@@ -52,6 +52,7 @@ public class TokenJdbcDao extends BaseJdbcDao {
             return null;
         }
     }
+
 
 
     public Token insert(Token t) {
@@ -66,10 +67,10 @@ public class TokenJdbcDao extends BaseJdbcDao {
         parameters.put("expires_at", t.getExpiresAt());
         parameters.put("confirmed_at", t.getConfirmedAt());
         if(t.getUser()!=null)parameters.put("user_id", t.getUser().getId());
+
+
         Number result = insert.executeAndReturnKey(parameters);
-
         t.setId(result.longValue());
-
         return t;
 
     }
@@ -101,8 +102,11 @@ public class TokenJdbcDao extends BaseJdbcDao {
                 t.getUser()==null?null:t.getUser().getId(),
                 t.getId()
         };
-        int result = jdbcTemplate.update(sql, parameters);
         System.out.println(sql);
+        int result = jdbcTemplate.update(sql, parameters);
+
         return t;
     }
+
+
 }

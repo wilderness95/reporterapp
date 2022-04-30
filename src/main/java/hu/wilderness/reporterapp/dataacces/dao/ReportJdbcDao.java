@@ -31,6 +31,17 @@ public class ReportJdbcDao extends BaseJdbcDao {
         }
     }
 
+    public Report findById(long reportId) {
+        String sql = "select * from " + getTableName() + " r where r.id = ?";
+        Object[] params = {reportId};
+        try {
+            Report r = jdbcTemplate.queryForObject(sql, params, new ReportMapper());
+            return r;
+        } catch (DataAccessException e) {
+            return null;
+        }
+    }
+
     public List<Report> findAll(){
         String sql = "select * from " + getTableName();
         List<Report> result = jdbcTemplate.query(sql, new ReportMapper());

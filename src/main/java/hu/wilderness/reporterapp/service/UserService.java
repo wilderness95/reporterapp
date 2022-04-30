@@ -2,10 +2,8 @@ package hu.wilderness.reporterapp.service;
 
 
 import hu.wilderness.reporterapp.dataacces.dao.UserJdbcDao;
-import hu.wilderness.reporterapp.domain.Report;
 import hu.wilderness.reporterapp.domain.Token;
 import hu.wilderness.reporterapp.domain.User;
-import hu.wilderness.reporterapp.dto.RegistrationDto;
 import hu.wilderness.reporterapp.dto.UserDto;
 import hu.wilderness.reporterapp.utils.passwordGenerator;
 import org.modelmapper.ModelMapper;
@@ -51,42 +49,11 @@ public class UserService implements UserDetailsService {
         return userList;
     }
 
-    public void sendActivationEmailForUser(User user){
-        Token token = tokenService.createNew("FIRSTPASSWORD");
-        token.setUser(user);
-        tokenService.save(token);
-        emailService.sendRequestMailToActivateAccount(user.getEmail(),token.getToken());
-    }
-
-    public void setUserActive(User user, Boolean active){
-        user.setActive(active);
-        save(user);
+    public User getUser(long id){
+        return userJdbcDao.findById(id);
     }
 
 
-    public void setSuccessfulState(String tokenUuid) {
-        Token token = tokenService.getToken(tokenUuid);
-        System.out.println("token:    " +token.toString());
-        User user = getUserByToken(token.getId());
-        System.out.println(user.toString());
-        Date currentDate = new Date();
-
-        if(token.isActive() && !token.isSuccessful()){
-            tokenService.setActiveAndSuccessfulDate(token,false,true,currentDate);
-            setUserActive(user,true);
-            log.debug("A megerősítés sikeres volt....");
-
-        }else if(user.getActive()){
-            log.debug("A megerősítés már sikeres volt");
-        }
-        else{
-            setUserActive(user,false);
-            log.debug("A megerősítés sikertelen volt...");
-        }
-    }
-
-    private User getUserByToken(Long id) { return userJdbcDao.findByToken(id);
-    }
 
     //TODO ellenőrizni, hogy a mail cím létezik-e már
     public User createNew(UserDto userDto) {
@@ -104,12 +71,18 @@ public class UserService implements UserDetailsService {
         user.setActive(false);
         user.setCreatedDate(new Date());
         user.setLastLoggedIn(null);
-
         user = save(user);
 
-        sendActivationEmailForUser(user);
-        log.debug("create a new user: " + user.toString());
+
+        log.debug("create a new user: \n\n " + user.toString());
         return user;
+    }
+
+    public void sendFirstLoginMail(UserDto userDto){
+        User user = createNew(userDto);
+        System.out.println("\n\n\n "+ userJdbcDao.findById(user.getId())+"\n\n\n");
+        Token token = tokenService.createNew("FIRSTPASSWORD", user);
+        System.out.println(tokenService.getToken2(token.getToken()));
     }
 
 

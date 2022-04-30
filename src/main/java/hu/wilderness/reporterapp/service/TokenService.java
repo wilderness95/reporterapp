@@ -24,7 +24,7 @@ public class TokenService {
     @Autowired
     TokenJdbcDao tokenJdbcDao;
 
-    public Token createNew(String type) {
+    public Token createNew(String type, User user) {
         Token token = new Token();
         token.setToken(createNewToken());
         token.setActive(true);
@@ -38,7 +38,10 @@ public class TokenService {
         } else if (type.equals("RESETPASSWORD")) {
             token.setType(Token.TokenType.RESETPASSWORD);
         }
-
+        if (user != null) {
+            token.setUser(user);
+            log.debug("\n \n"+user.toString()+"\n\n");
+        }
         token = save(token);
         log.debug("create a new " + token.getType() + " token: " + token);
 
@@ -68,9 +71,13 @@ public class TokenService {
         }
         return token;
     }
+public Token getToken2(String tokeuid){
+        return tokenJdbcDao.findByTokenAndActive(tokeuid,true);
 
+}
     public Token getToken(String tokenUuid) {
         Token token = tokenJdbcDao.findByToken(tokenUuid);
+        System.out.println("fasz bele " + token.toString());
         if (isNotExpiredAndActive(token) && !token.isSuccessful())
             return token;
         else if (!isNotExpiredAndActive(token) && token.isSuccessful()) {
@@ -81,6 +88,8 @@ public class TokenService {
             //  throw new ReporterException(ErrorConstant.TOKEN_IS_EXPIRED);
         }
     }
+
+
 
     public Token getActiveToken(String tokenUuid) {
         return tokenJdbcDao.findByTokenAndActive(tokenUuid, true);

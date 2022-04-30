@@ -33,7 +33,7 @@ public class AdminController {
 
     @PostMapping(value = "/addUser")
     public String newUser(UserDto userDto) {
-        userService.createNew(userDto);
+        userService.sendFirstLoginMail(userDto);
 
         return "redirect:/admin/user";
     }
@@ -42,7 +42,7 @@ public class AdminController {
     public ModelAndView emailConfirm(@PathVariable String uuId){
         String message;
         try {
-            userService.setSuccessfulState(uuId);
+        //    userService.sendFirstLoginMail()
         } catch (Exception e) {
             System.out.println("hiba: "+ e);
             message = e.getMessage();

@@ -22,7 +22,19 @@ public class TokenMapper implements RowMapper<Token> {
         token.setCreatedAt(DateHelper.getDateTime(rs, "created_at"));
         token.setExpiresAt(DateHelper.getDateTime(rs, "expires_at"));
         token.setConfirmedAt(DateHelper.getDateTime(rs, "confirmed_at"));
-        token.setUser(new User(rs.getInt("user_id")));
+        token.setUser(getUserObject(rs,""));
+//           token.setUser(new User(rs.getLong("user_id")));
+
         return token;
+    }
+
+    private static User getUserObject(ResultSet rs, String prefix) {
+        try {
+            long userId = rs.getLong("user_id");
+            if(rs.wasNull()) return null;
+            return new User(userId);
+        } catch (SQLException e) {
+            return null;
+        }
     }
 }

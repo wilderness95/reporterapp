@@ -51,6 +51,8 @@ import java.util.Date;
 
         private Date confirmedAt;
 
+
+        @JoinColumn(name = "user_id", nullable = true)
         @ManyToOne
         private User user;
 

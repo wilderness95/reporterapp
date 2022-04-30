@@ -20,9 +20,9 @@ public class UserJdbcDao extends BaseJdbcDao {
         return "user";
     }
 
-    public User findByToken(long tokenId) {
-        String sql = "select * from " + getTableName() + " u where u.token_id = ?";
-        Object[] params = {tokenId};
+    public User findById(long userId) {
+        String sql = "select * from " + getTableName() + " u where u.id = ?";
+        Object[] params = {userId};
         try {
             User u = jdbcTemplate.queryForObject(sql, params, new UserMapper());
             return u;
@@ -62,9 +62,11 @@ public class UserJdbcDao extends BaseJdbcDao {
         parameters.put("role_name", u.getRoleName());
 
 
+
+
         Number result = insert.executeAndReturnKey(parameters);
 
-        u.setId(result.intValue());
+        u.setId(result.longValue());
         return u;
     }
 

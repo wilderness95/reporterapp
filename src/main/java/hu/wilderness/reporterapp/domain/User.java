@@ -22,7 +22,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String lastName;
 
@@ -49,7 +49,7 @@ public class User {
     public User() {
     }
 
-    public User(Integer id) {
+    public User(Long id) {
         this.id = id;
     }
 
