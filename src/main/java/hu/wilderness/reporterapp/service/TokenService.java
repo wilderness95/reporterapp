@@ -38,9 +38,8 @@ public class TokenService {
         } else if (type.equals("RESETPASSWORD")) {
             token.setType(Token.TokenType.RESETPASSWORD);
         }
-        if (user != null) {
+        if ( user != null){
             token.setUser(user);
-            log.debug("\n \n"+user.toString()+"\n\n");
         }
         token = save(token);
         log.debug("create a new " + token.getType() + " token: " + token);

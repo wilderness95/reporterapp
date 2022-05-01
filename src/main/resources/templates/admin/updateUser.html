@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="hu" layout:decorate="~{admin/main}">
+<head>
+    <title></title>
+</head>
+<body>
+
+<div layout:fragment="loginContent">
+
+    <div class="container">
+        <h1>Employee Management System</h1>
+        <hr>
+        <h2>Update Employee</h2>
+
+        <form action="#" th:action="@{/admin/saveUser}" th:object="${user}" method="POST">
+
+            <!-- Add hidden form field to handle update -->
+            <input type="hidden" th:field="*{id}" />
+
+            <input type="text" th:field="*{firstName}" class="form-control mb-4 col-4">
+
+            <input type="text" th:field="*{lastName}" class="form-control mb-4 col-4">
+
+            <input type="text" th:field="*{email}" class="form-control mb-4 col-4">
+
+            <input type="text" th:field="*{phoneNumber}" class="form-control mb-4 col-4">
+
+            <input type="text" th:field="*{county}" class="form-control mb-4 col-4">
+
+            <input type="text" th:field="*{roleName}" class="form-control mb-4 col-4">
+
+            <button type="submit" class="btn btn-info col-2"> Update Employee</button>
+        </form>
+
+        <hr>
+
+        <a th:href="@{/}"> Back to Employee List</a>
+    </div>
+
+</div>
+
+</body>
+</html>

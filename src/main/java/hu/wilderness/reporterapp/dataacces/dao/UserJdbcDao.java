@@ -2,8 +2,10 @@ package hu.wilderness.reporterapp.dataacces.dao;
 
 import hu.wilderness.reporterapp.dataacces.dao.parents.BaseJdbcDao;
 import hu.wilderness.reporterapp.dataacces.mapper.ReportMapper;
+import hu.wilderness.reporterapp.dataacces.mapper.TokenMapper;
 import hu.wilderness.reporterapp.dataacces.mapper.UserMapper;
 import hu.wilderness.reporterapp.domain.Report;
+import hu.wilderness.reporterapp.domain.Token;
 import hu.wilderness.reporterapp.domain.User;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -47,6 +49,13 @@ public class UserJdbcDao extends BaseJdbcDao {
         List<User> result = jdbcTemplate.query(sql, new UserMapper());
         return result;
     }
+    public List<User> findByActive(Boolean active) {
+        String sql = "select * from "+getTableName() + " u where u.active = ?";
+        Object[] params = {active};
+        List<User> result = jdbcTemplate.query (sql,params, new UserMapper());
+        return result;
+    }
+
 
     public User insert(User u) {
         Map<String, Object> parameters = new HashMap();
@@ -97,7 +106,7 @@ public class UserJdbcDao extends BaseJdbcDao {
                 u.getActive(),
                 u.getCreatedDate(),
                 u.getLastLoggedIn(),
-                u.getRoleName(),
+                u.getRoleName().toString(),
                 u.getId()
         };
         int result = jdbcTemplate.update(sql, parameters);

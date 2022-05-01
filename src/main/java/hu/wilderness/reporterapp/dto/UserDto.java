@@ -11,6 +11,9 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class UserDto {
 
+
+    private Long id;
+
     @NotNull
     private String firstName;
 
@@ -27,5 +30,5 @@ public class UserDto {
     private String county;
 
     @NotNull
-    private String role;
+    private String roleName;
 }

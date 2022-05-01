@@ -4,8 +4,8 @@ package hu.wilderness.reporterapp.service;
 import hu.wilderness.reporterapp.dataacces.dao.UserJdbcDao;
 import hu.wilderness.reporterapp.domain.Token;
 import hu.wilderness.reporterapp.domain.User;
+import hu.wilderness.reporterapp.dto.NewPasswordDto;
 import hu.wilderness.reporterapp.dto.UserDto;
-import hu.wilderness.reporterapp.utils.passwordGenerator;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +48,10 @@ public class UserService implements UserDetailsService {
         log.debug(userList.toString());
         return userList;
     }
+    public List<User> listActiveUsers() {
+        List<User> userList = userJdbcDao.findByActive(true);
+        return userList;
+    }
 
     public User getUser(long id){
         return userJdbcDao.findById(id);
@@ -66,8 +70,8 @@ public class UserService implements UserDetailsService {
         user.setEmail(userDto.getEmail());
         user.setPhoneNumber(userDto.getPhoneNumber());
         user.setCounty(userDto.getCounty());
-        user.setRoleName( userDto.getRole().equals("ROLE_ADMIN") ? User.UserRole.ROLE_ADMIN : User.UserRole.ROLE_USER);
-        user.setPassword(bCryptPasswordEncoder.encode(passwordGenerator.generateRandomPassword(8)));
+        user.setRoleName( userDto.getRoleName().equals("ROLE_ADMIN") ? User.UserRole.ROLE_ADMIN : User.UserRole.ROLE_USER);
+       // user.setPassword(bCryptPasswordEncoder.encode(passwordGenerator.generateRandomPassword(8)));
         user.setActive(false);
         user.setCreatedDate(new Date());
         user.setLastLoggedIn(null);
@@ -78,11 +82,16 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    public void setUserActive(User user, Boolean active){
+        System.out.println(user.toString());
+        user.setActive(active);
+        save(user);
+    }
+
     public void sendFirstLoginMail(UserDto userDto){
         User user = createNew(userDto);
-        System.out.println("\n\n\n "+ userJdbcDao.findById(user.getId())+"\n\n\n");
         Token token = tokenService.createNew("FIRSTPASSWORD", user);
-        System.out.println(tokenService.getToken2(token.getToken()));
+        emailService.sendRequestMailToActivateAccount(user.getEmail(), token.getToken());
     }
 
 
@@ -97,7 +106,11 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-
+public NewPasswordDto passDto(String uuid){
+        NewPasswordDto npdto = new NewPasswordDto();
+        npdto.setUuid(uuid);
+        return npdto;
+}
     @Override
     public UserDetails loadUserByUsername(String emailAddress) throws UsernameNotFoundException {
         User user = userJdbcDao.findByEmailAddress(emailAddress);
@@ -108,5 +121,28 @@ public class UserService implements UserDetailsService {
         return new CustomUserDetails(user);
     }
 
+public boolean isTheSamePassword(String password1, String password2){
+        return password1.equals(password2)? true : false;
+}
+    public void setAccountActive (NewPasswordDto newPasswordDto) {
+        Token token = tokenService.getToken2(newPasswordDto.getUuid());
+        User user = getUser(token.getUser().getId());
+        if (isTheSamePassword(newPasswordDto.getPassword1(), newPasswordDto.getPassword2())){
+            user.setPassword(bCryptPasswordEncoder.encode(newPasswordDto.getPassword1()));
+            user.setActive(true);
+            save(user);
+        }
+    }
+
+    public User UserDtoToUser(UserDto udt){
+        User user = getUser(udt.getId());
+
+        user.setFirstName(udt.getFirstName());
+        user.setLastName(udt.getLastName());
+        user.setCounty(udt.getCounty());
+        user.setEmail(udt.getEmail());
+        user.setPhoneNumber(udt.getPhoneNumber());
+        return user;
+    }
 
 }

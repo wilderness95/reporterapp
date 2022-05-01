@@ -23,20 +23,23 @@
                     <th>Vezetéknév</th>
                     <th>Keresztnév</th>
                     <th>Email</th>
+                    <th>Telefonszám</th>
                     <th>Szerepkör</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>fdsf</td>
-                    <td>fds</td>
-                    <td>fdsf</td>
-                    <td>fdsf</td>
+                <tr th:each="user : ${users}">
+
+                    <td th:text="${user.lastName}"></td>
+                    <td th:text="${user.firstName}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.phoneNumber}"></td>
+                    <td th:text="${user.roleName}"></td>
                     <td>
-                        <button  class="btn btn-danger">Részletek</button>
-                        <button  class="btn btn-danger">Módosít</button>
-                        <button  class="btn btn-info" style="margin-left: 10px">Töröl</button>
+                        <a th:href="@{/admin/showuser/{id}(id=${user.id})}" class="btn btn-info">Részletek</a>
+                        <a th:href="@{/admin/updateuser/{id}(id=${user.id})}" class="btn btn-default">Módosít</a>
+                        <a th:href="@{/admin/deleteuser/{id}(id=${user.id})}" class="btn btn-danger">Töröl</a>
                     </td>
                 </tr>
                 </tbody>

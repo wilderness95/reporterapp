@@ -173,7 +173,6 @@ public class ReportService {
         if(token.isActive() && !token.isSuccessful()){
             tokenService.setActiveAndSuccessfulDate(token,false,true,currentDate);
             setActiveState(report,true);
-            log.debug("faszom: \n \n" + reportJdbcDao.findById(report.getId()).toString());
             log.debug("A megerősítés sikeres volt....");
 
         }else if(report.isActive()){
