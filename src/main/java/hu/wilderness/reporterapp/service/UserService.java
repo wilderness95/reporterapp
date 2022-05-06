@@ -71,7 +71,6 @@ public class UserService implements UserDetailsService {
         user.setPhoneNumber(userDto.getPhoneNumber());
         user.setCounty(userDto.getCounty());
         user.setRoleName( userDto.getRoleName().equals("ROLE_ADMIN") ? User.UserRole.ROLE_ADMIN : User.UserRole.ROLE_USER);
-       // user.setPassword(bCryptPasswordEncoder.encode(passwordGenerator.generateRandomPassword(8)));
         user.setActive(false);
         user.setCreatedDate(new Date());
         user.setLastLoggedIn(null);
@@ -91,7 +90,7 @@ public class UserService implements UserDetailsService {
     public void sendFirstLoginMail(UserDto userDto){
         User user = createNew(userDto);
         Token token = tokenService.createNew("FIRSTPASSWORD", user);
-        emailService.sendRequestMailToActivateAccount(user.getEmail(), token.getToken());
+        emailService.sendRequestMailToActivateAccount(user.getEmail(), token.getToken(), user.getFirstName());
     }
 
 
@@ -124,6 +123,7 @@ public NewPasswordDto passDto(String uuid){
 public boolean isTheSamePassword(String password1, String password2){
         return password1.equals(password2)? true : false;
 }
+//FIXME nincs token lejárat ellenőrzés, többször lehet rá kattintani hiba nélkül
     public void setAccountActive (NewPasswordDto newPasswordDto) {
         Token token = tokenService.getToken2(newPasswordDto.getUuid());
         User user = getUser(token.getUser().getId());
@@ -142,6 +142,7 @@ public boolean isTheSamePassword(String password1, String password2){
         user.setCounty(udt.getCounty());
         user.setEmail(udt.getEmail());
         user.setPhoneNumber(udt.getPhoneNumber());
+        user.setRoleName(udt.getRoleName().equals("ROLE_ADMIN") ? User.UserRole.ROLE_ADMIN : User.UserRole.ROLE_USER);
         return user;
     }
 

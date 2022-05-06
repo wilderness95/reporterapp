@@ -24,7 +24,6 @@ public class HomeController {
 
     @RequestMapping("/")
     public String home(Model model){
-        model.addAttribute("reports",reportService.getAllReports());
         return "index";
     }
 

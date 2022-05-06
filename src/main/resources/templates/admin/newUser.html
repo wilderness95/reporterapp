@@ -13,25 +13,53 @@
     <div class="col-md-8">
 
 
-        <div class="card mt-2 mx-auto p-4 bg-light " >
+        <div class="card mt-2 mx-auto p-4 bg-light ">
             <div class="card-body bg-light">
                 <div class="container">
+                    <h1 class="pb-2 border-bottom row">
+                        <span class="col-sm-10 pb-4">Új egyesületi tag hozzáadása</span>
+                    </h1>
 
-                    <form id="newUser" name="newUser" th:action="@{/addUser}" th:object="${user}" method="POST" enctype="multipart/form-data">
+                    <form enctype="multipart/form-data" id="newUser" method="POST" name="newUser" th:action="@{/addUser}"
+                          th:object="${user}">
                         <div class="controls">
                             <div class="row">
-                            </div><br>
+                            </div>
+                            <br>
                             <div class="col-md-6">
-                                <div class="form-group"><input id="name" type="text" th:field="*{firstName}" class="form-control" placeholder="Kérem adja meg a vezetéknevét" required="required" data-error="Firstname is required."></div>
-                                <div class="form-group"><input id="nickName" type="text"  th:field="*{lastName}" class="form-control" placeholder="Kérem adja meg a keresztnevét" required="required" data-error="Lastname is required."></div>
-                                <div class="form-group"><input id="email" type="email"  th:field="*{email}" class="form-control" placeholder="Kérem adja meg az email címét" required="required" data-error="Valid email is required."></div>
-                                <div class="form-group"><input id="phoneNumber" type="text"  th:field="*{phoneNumber}" class="form-control" placeholder="Kérem adja meg az email címét" required="required" data-error="Valid email is required."></div>
-                                <div class="form-group"><input id="county" type="text"  th:field="*{county}" class="form-control" placeholder="Kérem adja meg az email címét" required="required" data-error="Valid email is required."></div>
-                                <div class="form-group"> <select id="role" type="text" th:field="*{roleName}">
+                                <div class="form-group"><input class="form-control" data-error="Firstname is required." id="name"
+                                                               placeholder="Kérem adja meg a vezetéknevet"
+                                                               required="required"
+                                                               th:field="*{firstName}" type="text">
+                                </div>
+                                <div class="form-group"><input class="form-control" data-error="Lastname is required." id="nickName"
+                                                               placeholder="Kérem adja meg a keresztnevet"
+                                                               required="required"
+                                                               th:field="*{lastName}" type="text">
+                                </div>
+                                <div class="form-group"><input class="form-control" data-error="Valid email is required." id="email"
+                                                               placeholder="Kérem adja meg az email címet"
+                                                               required="required"
+                                                               th:field="*{email}"
+                                                               type="email"></div>
+                                <div class="form-group"><input class="form-control" data-error="Valid email is required." id="phoneNumber"
+                                                               placeholder="Kérem adja meg a telefonszámot"
+                                                               required="required"
+                                                               th:field="*{phoneNumber}"
+                                                               type="text"></div>
+                                <div class="form-group"><input class="form-control" data-error="Valid email is required." id="county"
+                                                               placeholder="Kérem adja meg az érintett megyét"
+                                                               required="required"
+                                                               th:field="*{county}"
+                                                               type="text"></div>
+                                <label for="role">Szerepkör:</label>
+                                <div class="form-group"><select  id="role" th:field="*{roleName}" class="form-control" aria-label="Default select example">
                                     <option value="ROLE_ADMIN">admin</option>
                                     <option value="ROLE_USER">user</option>
                                 </select></div>
-                                <div class="form-group"><button class="btn btn-primary" type="submit">Elküld</button></div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary" type="submit">Regisztrál</button>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -42,7 +70,7 @@
     </div>
     <div class="col-md-2"></div>
 </div>
-    </div>
+</div>
 </div>
 
 </body>

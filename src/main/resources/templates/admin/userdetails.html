@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="hu" layout:decorate="~{admin/main}">
+<head>
+    <title></title>
+</head>
+<body>
+
+<div layout:fragment="loginContent">
+
+    <div class="col-md-2"></div>
+
+
+    <div class="col-md-8">
+
+
+
+
+                    <ul class="list-group">
+                    <li class="list-group-item active">Felhasználó adatai</li>
+                    <li class="list-group-item"><span>Vezetéknév:   </span><span th:text="${user.lastName}"></span><br/></li>
+                    <li class="list-group-item"><span>Keresztnév:   </span><span th:text="${user.firstName}"></span><br/></li>
+                    <li class="list-group-item"><span>E-mail:   </span><span th:text="${user.email}"></span><br/></li>
+                    <li class="list-group-item"><span>Password: </span><span th:text="${user.password}"></span><br/></li>
+                    <li class="list-group-item"><span>Aktív:    </span><span th:text="${user.active}"></span><br/></li>
+                    <li class="list-group-item"><span>Megye:    </span><span th:text="${user.county}"></span><br/></li>
+                    <li class="list-group-item"><span>Létrehozás dátuma:    </span><span th:text="${user.createdDate}"></span><br/></li>
+                    </ul>
+
+
+
+    </div>
+
+</div>
+
+</div>
+
+</body>
+</html>

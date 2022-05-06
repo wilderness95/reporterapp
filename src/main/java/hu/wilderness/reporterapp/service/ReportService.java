@@ -5,7 +5,6 @@ import hu.wilderness.reporterapp.dataacces.dao.TokenJdbcDao;
 import hu.wilderness.reporterapp.domain.Report;
 import hu.wilderness.reporterapp.domain.Token;
 import hu.wilderness.reporterapp.dto.ReportDto;
-import hu.wilderness.reporterapp.exception.ReporterException;
 import hu.wilderness.reporterapp.utils.FileUploadUtil;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -21,7 +20,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -74,9 +72,6 @@ public class ReportService {
         report = save(report);
 
 
-
-
-
         try {
             uploadImage(report, fileName, multipartFile);
         } catch (IOException e) {
@@ -103,9 +98,17 @@ public class ReportService {
         return reportJdbcDao.findByToken(tokenId);
     }
 
+    public Report getReportById(long id) {
+        return reportJdbcDao.findById(id);
+    }
+
     public List<Report> getAllReports() {
         return reportJdbcDao.findAll();
 
+    }
+
+    public List<Report> getAllActiveReport() {
+        return reportJdbcDao.findByActive(true);
     }
 
     public String getFileName(MultipartFile multipartFile) {
@@ -153,37 +156,47 @@ public class ReportService {
         if (!report.isActive()) {
             Token token = tokenService.createNew("CONFIRMATION", null);
             report.setToken(token);
-            emailService.sendConfirmationMail(report.getEmail(), token.getToken());
+            emailService.sendConfirmationMail(report.getEmail(), token.getToken(),report.getFirstName());
         } else {
             log.debug("Ez egy anonym bejelentés volt, nem szükséges a token létrehozása.");
 
         }
     }
 
-    public Report setActiveState(Report report,Boolean active){
+    public Report setActiveState(Report report, Boolean active) {
         report.setActive(active);
         return save(report);
     }
 
     public void setSuccessfulState(String tokenUuid) {
-       Token token = tokenService.getToken(tokenUuid);
+        Token token = tokenService.getToken(tokenUuid);
         Report report = getReport(token.getId());
         Date currentDate = new Date();
 
-        if(token.isActive() && !token.isSuccessful()){
-            tokenService.setActiveAndSuccessfulDate(token,false,true,currentDate);
-            setActiveState(report,true);
+        if (token.isActive() && !token.isSuccessful()) {
+            tokenService.setActiveAndSuccessfulDate(token, false, true, currentDate);
+            setActiveState(report, true);
             log.debug("A megerősítés sikeres volt....");
 
-        }else if(report.isActive()){
+        } else if (report.isActive()) {
             log.debug("A megerősítés már sikeres volt");
-        }
-        else{
-            setActiveState(report,false);
+        } else {
+            setActiveState(report, false);
             log.debug("A megerősítés sikertelen volt...");
         }
     }
 
+    public Report reportDtoToReport(ReportDto rdt) {
+        Report report = getReportById(rdt.getId());
 
+        report.setLastName(rdt.getLastName());
+        report.setFirstName(rdt.getFirstName());
+        report.setCounty(rdt.getCounty());
+        report.setAddress(rdt.getAddress());
+        report.setEmail(rdt.getEmail());
+        report.setMessage(rdt.getMessage());
+
+        return report;
+    }
 
 }

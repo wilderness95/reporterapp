@@ -2,7 +2,9 @@ package hu.wilderness.reporterapp.dataacces.dao;
 
 import hu.wilderness.reporterapp.dataacces.dao.parents.BaseJdbcDao;
 import hu.wilderness.reporterapp.dataacces.mapper.ReportMapper;
+import hu.wilderness.reporterapp.dataacces.mapper.UserMapper;
 import hu.wilderness.reporterapp.domain.Report;
+import hu.wilderness.reporterapp.domain.User;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +48,13 @@ public class ReportJdbcDao extends BaseJdbcDao {
         String sql = "select * from " + getTableName();
         List<Report> result = jdbcTemplate.query(sql, new ReportMapper());
         return  result;
+    }
+
+    public List<Report> findByActive(Boolean active) {
+        String sql = "select * from "+getTableName() + " u where u.active = ?";
+        Object[] params = {active};
+        List<Report> result = jdbcTemplate.query (sql,params, new ReportMapper());
+        return result;
     }
 
     public Report insert(Report report) {

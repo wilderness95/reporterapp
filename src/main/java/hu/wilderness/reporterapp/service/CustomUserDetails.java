@@ -1,23 +1,20 @@
 package hu.wilderness.reporterapp.service;
 
 import hu.wilderness.reporterapp.domain.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
 
 
 public class CustomUserDetails implements UserDetails, Serializable {
 
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
+    private final User user;
 
-    private User user;
-
-    public CustomUserDetails(User user){
+    public CustomUserDetails(User user) {
         this.user = user;
     }
 
@@ -28,14 +25,12 @@ public class CustomUserDetails implements UserDetails, Serializable {
 
     @Override
     public String getPassword() {
-        log.debug("jeszo");
         return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        log.debug("user: " +user.getEmail());
-    return user.getEmail();
+        return user.getEmail();
     }
 
     @Override

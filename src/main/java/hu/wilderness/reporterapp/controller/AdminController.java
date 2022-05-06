@@ -1,14 +1,18 @@
 package hu.wilderness.reporterapp.controller;
 
+import hu.wilderness.reporterapp.domain.Report;
 import hu.wilderness.reporterapp.domain.User;
 import hu.wilderness.reporterapp.dto.NewPasswordDto;
+import hu.wilderness.reporterapp.dto.ReportDto;
 import hu.wilderness.reporterapp.dto.UserDto;
+import hu.wilderness.reporterapp.service.ReportService;
 import hu.wilderness.reporterapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,6 +22,9 @@ public class AdminController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    ReportService reportService;
 
 
     @RequestMapping("/admin/user")
@@ -65,21 +72,17 @@ public class AdminController {
         return "redirect:/admin/user";
     }
 
+    @GetMapping("/admin/showuser/{id}")
+    public String showUserDetails(@PathVariable(value = "id") long id, Model model) {
 
-//    @RequestMapping(value = "/admin/setpassword/{uuId}",method = RequestMethod.GET)
-//    public ModelAndView emailConfirm(@PathVariable String uuId){
-//        String message;
-//        try {
-//           userService.setAccountActive(uuId);
-//        } catch (Exception e) {
-//            System.out.println("hiba: "+ e);
-//            message = e.getMessage();
-//        }
-//
-//        ModelAndView mv = new ModelAndView();
-//        mv.setViewName("/email/emailconfirmed");
-//        return mv;
-//    }
+        User user = userService.getUser(id);
+
+        model.addAttribute("user", user);
+        return "/admin/userdetails";
+    }
+
+
+
     @RequestMapping(value = "/admin/setpassword/{uuId}",method = RequestMethod.GET)
     public String emailConfirm(Model model, @PathVariable("uuId") String uuId){
 
@@ -101,4 +104,50 @@ public class AdminController {
 
     }
 
+    @RequestMapping("/admin/report")
+    public String reports(Model model){
+        model.addAttribute("reports",reportService.getAllActiveReport());
+        return "/admin/report";
+    }
+    @RequestMapping("/admin/case")
+    public String cases(){
+
+        return "/admin/case";
+    }
+
+
+    @GetMapping(value = "/admin/deletereport/{id}")
+    public String deleteReport(@PathVariable(value = "id") long id,  RedirectAttributes redirAttrs) {
+        reportService.setActiveState(reportService.getReportById(id),false);
+        redirAttrs.addFlashAttribute("success", "A bejelentést sikeresen törölted!");
+        return "redirect:/admin/report";
+    }
+
+    @GetMapping("/admin/showreport/{id}")
+    public String showReportDetails(@PathVariable(value = "id") long id, Model model) {
+
+       Report report = reportService.getReportById(id);
+
+        model.addAttribute("report", report);
+        return "/admin/reportdetails";
+    }
+
+    @GetMapping("/admin/updatereport/{id}")
+    public String updateReport(@PathVariable(value = "id") long id, Model model) {
+
+       Report report = reportService.getReportById(id);
+
+
+        model.addAttribute("report", report);
+        return "/admin/updatereports";
+    }
+
+    @PostMapping(value = "/admin/updateReport")
+    public String updateReport(ReportDto reportDto) {
+
+        reportService.save(reportService.reportDtoToReport(reportDto));
+
+
+        return "redirect:/admin/report";
+    }
 }

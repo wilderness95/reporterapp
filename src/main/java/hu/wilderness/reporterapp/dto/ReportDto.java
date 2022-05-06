@@ -8,6 +8,7 @@ import java.util.Date;
 @Setter
 @Getter
 public class ReportDto {
+        private  Long id;
 
         private String lastName;
 

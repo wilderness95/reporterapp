@@ -33,5 +33,13 @@ function getIpAddress(){
     $("#ip").html(data.ip);
 })
 
+    $(document).ready(function() {
+        $("#success-alert").hide();
+        $("#delete").click(function showAlert() {
+            $("#success-alert").fadeTo(2000, 500).slideUp(500, function() {
+                $("#success-alert").slideUp(500);
+            });
+        });
+    });
 
 }

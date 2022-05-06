@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="hu" layout:decorate="~{admin/main}">
+<head>
+    <title></title>
+</head>
+<body>
+
+<div layout:fragment="loginContent">
+
+    <div class="col-md-2"></div>
+
+
+    <div class="col-md-8">
+
+
+
+
+        <ul class="list-group">
+            <li class="list-group-item active">Bejelentés részletei</li>
+            <li class="list-group-item"><span>Névtelen bejelentés:    </span><span th:text="${report.isAnonym}"></span><br/></li>
+            <li class="list-group-item"><span>Vezetéknév:   </span><span th:text="${report.lastName}"></span><br/></li>
+            <li class="list-group-item"><span>Keresztnév:   </span><span th:text="${report.firstName}"></span><br/></li>
+            <li class="list-group-item"><span>E-mail:   </span><span th:text="${report.email}"></span><br/></li>
+            <li class="list-group-item"><span>Megye:    </span><span th:text="${report.county}"></span><br/></li>
+            <li class="list-group-item"><span>Észlelés időpontja:    </span><span th:text="${report.notifiedDate}"></span><br/></li>
+            <li class="list-group-item"><span>Életveszélyben van:    </span><span th:text="${report.isDanger}"></span><br/></li>
+            <li class="list-group-item"><span>Bejelentés leírása:    </span><span th:text="${report.message}"></span><br/></li>
+            <li class="list-group-item"><span>Létrehozás dátuma:    </span><span th:text="${report.createdDate}"></span><br/></li>
+        </ul>
+
+
+
+    </div>
+
+</div>
+
+</div>
+
+</body>
+</html>

@@ -30,7 +30,6 @@ public class ReportMapper implements RowMapper<Report> {
         report.setIsAnonym(rs.getBoolean("is_anonym"));
         report.setIpAddress(rs.getString("ip_address"));
         report.setToken(new Token(rs.getLong("token_id")));
-        System.out.println("\n\n\nreportmapperben:"+ report.getToken().toString());
 
         return report;
     }

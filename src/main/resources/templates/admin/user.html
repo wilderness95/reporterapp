@@ -8,45 +8,51 @@
 <div layout:fragment="loginContent">
 
     <div class="container">
+
         <div class="panel-heading">
             <h1 class="pb-2 border-bottom row">
                 <span class="col-sm-10 pb-4">Egyesületi tagok</span>
                 <span class="col-sm-2 text-sm-right pb-4">
-            <a href="/admin/newUser" class="btn btn-primary btn-outline-primary d-block d-sm-inline-block">Új tag hozzáadása</a>
+            <a class="btn btn-primary" href="/admin/newUser"><i class="fas fa-user-plus ml-2"></i></a>
         </span>
             </h1>
         </div>
-        <div class="panel-body">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Vezetéknév</th>
-                    <th>Keresztnév</th>
-                    <th>Email</th>
-                    <th>Telefonszám</th>
-                    <th>Szerepkör</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="user : ${users}">
 
-                    <td th:text="${user.lastName}"></td>
-                    <td th:text="${user.firstName}"></td>
-                    <td th:text="${user.email}"></td>
-                    <td th:text="${user.phoneNumber}"></td>
-                    <td th:text="${user.roleName}"></td>
-                    <td>
-                        <a th:href="@{/admin/showuser/{id}(id=${user.id})}" class="btn btn-info">Részletek</a>
-                        <a th:href="@{/admin/updateuser/{id}(id=${user.id})}" class="btn btn-default">Módosít</a>
-                        <a th:href="@{/admin/deleteuser/{id}(id=${user.id})}" class="btn btn-danger">Töröl</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+        <table class="table table-striped table-responsive">
+            <thead>
+            <tr>
+                <th>Vezetéknév</th>
+                <th>Keresztnév</th>
+                <th>Email</th>
+                <th>Telefonszám</th>
+                <th>Szerepkör</th>
+                <th>Művelet</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${users}">
+
+                <td th:text="${user.lastName}"></td>
+                <td th:text="${user.firstName}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.phoneNumber}"></td>
+                <td th:text="${user.roleName}"></td>
+                <td>
+                    <a class="btn btn-default" th:href="@{/admin/showuser/{id}(id=${user.id})}"><i
+                            class="fas fa-info ml-2"></i></a>
+                    <a class="btn btn-default" th:href="@{/admin/updateuser/{id}(id=${user.id})}"><i
+                            class="fas fa-user-edit ml-2"></i></a>
+                    <a class="btn btn-danger" th:href="@{/admin/deleteuser/{id}(id=${user.id})}"><i
+                            class="fas fa-user-times ml-2"></i></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+
+
+
     </div>
-
 </div>
 
 </body>
